@@ -1,0 +1,19 @@
+services:
+    mongodb_acl_provider:
+        parent: doctrine_mongodb.odm.security.acl.provider
+
+security:
+    acl:
+        provider: mongodb_acl_provider
+
+    providers:
+        in_memory:
+            memory: ~
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        default:
+            anonymous: ~
