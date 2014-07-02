@@ -1,0 +1,16 @@
+SearchAwesome\CoreBundle\Document\Site:
+    repositoryClass:    SearchAwesome\CoreBundle\Repository\SiteRepository
+    collection:         sites
+    fields:
+        id:
+            id: true
+        name:
+            type: string
+        url:
+            type: string
+
+    referenceMany:
+        tags:
+            targetDocument: SearchAwesome\CoreBundle\Document\Tag
+            mappedBy:   site
+

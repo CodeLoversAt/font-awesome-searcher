@@ -1,0 +1,43 @@
+SearchAwesome\CoreBundle\Document\Icon:
+    repositoryClass:    SearchAwesome\CoreBundle\Repository\IconRepository
+    collection:         icons
+
+    indexes:
+        tags:
+            keys:
+                tags: true
+            options:
+                background: true
+
+    referenceOne:
+        site:
+            targetDocument: SearchAwesome\CoreBundle\Document\Site
+            index:  true
+            simple: true
+            inversedBy: icons
+
+    referenceMany:
+        tags:
+            targetDocument: SearchAwesome\CoreBundle\Document\Tag
+            index:  true
+            simple: true
+            inversedBy: icons
+
+    fields:
+        id:
+            id: true
+        name:
+            type: string
+        versions:
+            type: collection
+        cssClass:
+            type: string
+        createdAt:
+            type: date
+        updatedAt:
+            type: date
+
+    lifecycleCallbacks:
+        prePersist: [prePersist]
+        preUpdate: [preUpdate]
+

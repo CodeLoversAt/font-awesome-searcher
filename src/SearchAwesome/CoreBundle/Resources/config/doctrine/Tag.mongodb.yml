@@ -1,0 +1,34 @@
+SearchAwesome\CoreBundle\Document\Tag:
+    repositoryClass:    SearchAwesome\CoreBundle\Repository\TagRepository
+    collection:         tags
+
+    indexes:
+        name:
+            keys:
+                name: true
+            options:
+                background: true
+                unique: true
+        soundex:
+            keys:
+                soundex: true
+            options:
+                background: true
+
+    referenceMany:
+        icons:
+            targetDocument: SearchAwesome\CoreBundle\Document\Icon
+            mappedBy:   tags
+
+    fields:
+        id:
+            id: true
+        name:
+            type: string
+        versions:
+            type: collection
+        cssClass:
+            type: string
+        soundex:
+            type: string
+

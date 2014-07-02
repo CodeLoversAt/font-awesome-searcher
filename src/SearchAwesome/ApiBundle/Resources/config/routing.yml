@@ -1,0 +1,14 @@
+tags:
+    type:       rest
+    resource:   SearchAwesome\ApiBundle\Controller\TagController
+    prefix:     api
+
+icons:
+    type:       rest
+    resource:   SearchAwesome\ApiBundle\Controller\IconController
+    prefix:     api
+
+sites:
+    type:       rest
+    resource:   SearchAwesome\ApiBundle\Controller\SiteController
+    prefix:     api

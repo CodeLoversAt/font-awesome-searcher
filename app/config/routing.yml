@@ -1,8 +1,8 @@
 frontend_web:
-    resource: "@FrontendWebBundle/Resources/config/routing.yml"
+    resource: "@SearchAwesomeWebBundle/Resources/config/routing.yml"
     prefix:   /
 
 backend_api:
     type:     rest
-    resource: "@BackendApiBundle/Resources/config/routing.yml"
+    resource: "@SearchAwesomeApiBundle/Resources/config/routing.yml"
     prefix:   /
