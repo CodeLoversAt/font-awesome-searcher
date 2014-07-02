@@ -1,0 +1,16 @@
+Backend\CoreBundle\Document\Site:
+    repositoryClass:    Backend\CoreBundle\Repository\SiteRepository
+    collection:         sites
+    fields:
+        id:
+            id: true
+        name:
+            type: string
+        url:
+            type: string
+
+    referenceMany:
+        tags:
+            targetDocument: Backend\CoreBundle\Document\Tag
+            mappedBy:   site
+

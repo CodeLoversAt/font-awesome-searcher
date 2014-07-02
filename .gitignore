@@ -9,3 +9,6 @@
 /vendor/
 /bin/
 /composer.phar
+/web/bundles
+/web/compiled
+/web/bower

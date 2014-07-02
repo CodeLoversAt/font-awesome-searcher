@@ -23,12 +23,18 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new CodeLovers\AclBundle\CodeLoversAclBundle(),
             new Sixdays\OpcacheBundle\SixdaysOpcacheBundle(),
+            new Backend\CoreBundle\BackendCoreBundle(),
+            new Backend\ApiBundle\BackendApiBundle(),
+            new Frontend\WebBundle\FrontendWebBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            $bundles[] = new IsmaAmbrosi\Bundle\GeneratorBundle\IsmaAmbrosiGeneratorBundle();
         }
 
         return $bundles;

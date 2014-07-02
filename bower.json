@@ -1,0 +1,25 @@
+{
+  "name": "imap-copy",
+  "version": "0.0.0",
+  "authors": [
+    "Daniel Holzmann <d@velopment.at>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1",
+    "bootstrap-sass": "twbs/bootstrap-sass#~3.1.1",
+    "font-awesome": "~4.0.3",
+    "jquery.gritter": "*",
+    "ember": "~1.5.1",
+    "ember-data": "~1.0.0-beta.4"
+  }
+}

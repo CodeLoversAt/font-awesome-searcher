@@ -1,0 +1,43 @@
+Backend\CoreBundle\Document\Icon:
+    repositoryClass:    Backend\CoreBundle\Repository\IconRepository
+    collection:         icons
+
+    indexes:
+        tags:
+            keys:
+                tags: true
+            options:
+                background: true
+
+    referenceOne:
+        site:
+            targetDocument: Backend\CoreBundle\Document\Site
+            index:  true
+            simple: true
+            inversedBy: icons
+
+    referenceMany:
+        tags:
+            targetDocument: Backend\CoreBundle\Document\Tag
+            index:  true
+            simple: true
+            inversedBy: icons
+
+    fields:
+        id:
+            id: true
+        name:
+            type: string
+        versions:
+            type: collection
+        cssClass:
+            type: string
+        createdAt:
+            type: date
+        updatedAt:
+            type: date
+
+    lifecycleCallbacks:
+        prePersist: [prePersist]
+        preUpdate: [preUpdate]
+

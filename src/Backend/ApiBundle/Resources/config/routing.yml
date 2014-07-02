@@ -1,0 +1,14 @@
+tags:
+    type:       rest
+    resource:   Backend\ApiBundle\Controller\TagController
+    prefix:     api
+
+icons:
+    type:       rest
+    resource:   Backend\ApiBundle\Controller\IconController
+    prefix:     api
+
+sites:
+    type:       rest
+    resource:   Backend\ApiBundle\Controller\SiteController
+    prefix:     api

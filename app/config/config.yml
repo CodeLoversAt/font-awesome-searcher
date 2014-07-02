@@ -28,19 +28,32 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
 
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
-    #java: /usr/bin/java
+    bundles:        [ 'FrontendWebBundle' ]
     filters:
         cssrewrite: ~
-        #closure:
-        #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
-        #yui_css:
-        #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
+        less:
+            node: %node_path%
+            node_paths: [%node_modules%]
+            apply_to: "\.less$"
+        coffee:
+            bin: %coffee_path%
+            node: %node_path%
+            apply_to: "\.coffee$"
+        sass:
+            bin: %sass_path%
+            apply_to: "\.scss$"
+        uglifyjs2:
+            bin: %uglify_js%
+            node: %node_path%
+        uglifycss:
+            bin: %uglify_css%
+            node: %node_path%
 
 # Doctrine Configuration
 doctrine:
@@ -107,3 +120,47 @@ services:
         class: Twig_Extensions_Extension_Text
         tags:
             - name: twig.extension
+
+fos_rest:
+    view:
+        formats:
+            rss:    false
+            xml:    false
+            json:   true
+            jsonp:  true
+        jsonp_handler: ~
+        failed_validation: HTTP_BAD_REQUEST
+        mime_types:
+            json: ['application/json', 'application/x-json', 'application/vnd.example-com.foo+json']
+            rss: 'application/rss+xml'
+            jpg: 'image/jpeg'
+            png: 'image/png'
+        view_response_listener: 'force'
+#        disable_csrf_role: ROLE_API
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    routing_loader:
+        default_format: json
+    body_converter:
+        enabled:    true
+        validate: true
+        validation_errors_argument: validationErrors # This is the default value
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+#        messages:
+#            'Acme\HelloBundle\Exception\MyExceptionWithASafeMessage': true
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    serializer:
+        groups:     ["REST"]
+    service:
+        view_handler: backend_api.view_handler
+
+sensio_framework_extra:
+    view:    { annotations: false }
+    router:  { annotations: true }
+    request: { converters: true }

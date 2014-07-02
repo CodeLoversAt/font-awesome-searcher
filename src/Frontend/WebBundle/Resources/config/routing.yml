@@ -1,0 +1,3 @@
+_frontend:
+    path:     /
+    defaults: { _controller: FrontendWebBundle:Web:index }

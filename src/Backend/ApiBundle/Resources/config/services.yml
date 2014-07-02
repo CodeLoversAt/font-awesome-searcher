@@ -1,0 +1,12 @@
+parameters:
+    backend_api.handler.json.class: Backend\ApiBundle\Handler\JsonHandler
+
+services:
+    backend_api.handler.json:
+        class:  %backend_api.handler.json.class%
+        arguments: [@jms_serializer]
+
+    backend_api.view_handler:
+        parent: fos_rest.view_handler.default
+        calls:
+            - ['registerHandler', ['json', ['@backend_api.handler.json', 'createResponse']]]
