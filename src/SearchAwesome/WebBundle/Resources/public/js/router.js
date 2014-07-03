@@ -12,34 +12,6 @@ App.IconsRoute = Ember.Route.extend({
     isLoaded: false,
 
     model: function () {
-//        var store = this.store;
-//        console.log({search: this.get('search')});
-//
-//        return new Em.RSVP.Promise(function(resolve) {
-//            store.find('tag').then(function() {
-//                store.find('icon').then(function(icons) {
-//                    var promisArr = icons.getEach('tags');
-//
-//
-//                    Em.RSVP.all(promisArr).then(function() {
-//                        var filter = store.filter('icon', function(icon, index, enumberable) {
-//                            var match = false;
-//                            icon.get('tags').forEach(function(tag) {
-//                                if (tag.get('name') === 'adjust') {
-//                                    match = true;
-//                                }
-//                            });
-//
-//                            return match;
-//                        }); // filter
-//
-//                        resolve(filter);
-//                    }); // RSVP all
-//                }); // find icon
-//            }); // find tag
-//        }); // promise
-
-
         if (this.get('isLoaded')) {
             return this.store.all('icon');
         }
@@ -64,4 +36,48 @@ App.TagsRoute = Ember.Route.extend({
         this.set('isLoaded', true);
         return this.store.find('tag');
     }
+});
+
+(function() {
+
+    var get = Ember.get, set = Ember.set;
+
+    Ember.Location.registerImplementation('hashbang', Ember.HashLocation.extend({
+
+        getURL: function() {
+            return get(this, 'location').hash.substr(2);
+        },
+
+        setURL: function(path) {
+            get(this, 'location').hash = "!"+path;
+            set(this, 'lastSetURL', path);
+        },
+
+        onUpdateURL: function(callback) {
+            var self = this;
+            var guid = Ember.guidFor(this);
+
+            Ember.$(window).bind('hashchange.ember-location-'+guid, function() {
+                Ember.run(function() {
+                    var path = location.hash.substr(2);
+                    if (get(self, 'lastSetURL') === path) { return; }
+
+                    set(self, 'lastSetURL', null);
+
+                    callback(path);
+                });
+            });
+        },
+
+        formatURL: function(url) {
+            return '#!'+url;
+        }
+
+    })
+    );
+
+})();
+
+App.Router.reopen({
+    location: 'hashbang'
 });

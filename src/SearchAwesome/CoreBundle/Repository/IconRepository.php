@@ -13,22 +13,77 @@ use SearchAwesome\CoreBundle\Document\Tag;
 class IconRepository extends Repository
 {
     /**
-     * @param Tag[] $tags
+     * @param string $search
      *
      * @return Icon[]
      */
-    public function findByTags($tags)
+    public function findByName($search)
     {
-        $ids = array();
+        $regexes = array();
+        $soundex = array();
 
-        foreach ($tags as $tag) {
-            $ids[] = new \MongoId($tag->getId());
+        foreach (explode(' ', $search) as $s) {
+            if (trim($s)) {
+                $regexes[] = new \MongoRegex('/' . $s . '/i');
+                $sound = soundex($s);
+                if (!in_array($sound, $soundex)) {
+                    $soundex[] = $sound;
+                }
+            }
         }
 
-        return $this->createQueryBuilder()
-            ->field('tags')->in($ids)
-            ->getQuery()
-            ->execute()
-            ->toArray();
+        if (0 === count($regexes)) {
+            return $this->findAll();
+        }
+
+        $code = new \MongoCode('function() {
+            var match = true;
+
+            for (var i = 0; i < regexes.length; i++) {
+                var regex = regexes[i];
+                var test = false;
+                for (var j = 0; j < this.tags.length; j++) {
+                    if (this.tags[j] && -1 !== this.tags[j].name.search(regex)) {
+                        test = true;
+                        break;
+                    }
+                }
+
+                if (false === test) {
+                    match = false;
+                    break;
+                }
+            }
+
+            // check for soundex
+            if (false === match) {
+                match = true;
+                for (var i = 0; i < soundex.length; i++) {
+                    var s = soundex[i];
+                    var test = false;
+                    for (var j = 0; j < this.tags.length; j++) {
+                        if (this.tags[j] && this.tags[j].soundex == s) {
+                            test = true;
+                            break;
+                        }
+                    }
+
+                    if (false === test) {
+                        match = false;
+                        break;
+                    }
+                }
+            }
+
+            return match;
+        }', array('regexes' => $regexes, 'soundex' => $soundex));
+
+        $result = array();
+
+        foreach ($this->createQueryBuilder()->where($code)->getQuery()->execute() as $icon) {
+            $result[] = $icon;
+        }
+
+        return $result;
     }
 }

@@ -1,0 +1,17 @@
+SearchAwesome\CoreBundle\Document\TagUsage:
+    collection:         sites
+    type:               embeddedDocument
+
+    fields:
+        name:
+            type: string
+        soundex:
+            type: string
+        tagId:
+            type: id
+
+    referenceOne:
+        tag:
+            targetDocument: SearchAwesome\CoreBundle\Document\Tag
+            simple: true
+

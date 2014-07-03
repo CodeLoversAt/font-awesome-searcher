@@ -52,13 +52,6 @@ class Tag
     protected $updated_at;
 
     /**
-     * @var Collection
-     *
-     * @JMS\Type("ArrayCollection<SearchAwesome\CoreBundle\Document\Icon>")
-     */
-    protected $icons;
-
-    /**
      * soundex value for searching
      *
      * @var string
@@ -69,14 +62,6 @@ class Tag
      * @JMS\ReadOnly()
      */
     private $soundex;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->icons = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -156,40 +141,6 @@ class Tag
     public function getUpdatedAt()
     {
         return $this->updated_at;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getIcons()
-    {
-        return $this->icons;
-    }
-
-    /**
-     * @param Icon $icon
-     *
-     * @return Tag
-     */
-    public function addIcon(Icon $icon)
-    {
-        $this->icons->add($icon);
-        $icon->getTags()->add($this);
-
-        return $this;
-    }
-
-    /**
-     * @param Icon $icon
-     *
-     * @return Tag
-     */
-    public function removeIcon(Icon $icon)
-    {
-        $this->icons->removeElement($icon);
-        $icon->getTags()->removeElement($this);
-
-        return $this;
     }
 
     /**

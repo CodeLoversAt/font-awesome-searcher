@@ -10,8 +10,9 @@ App.Icon = DS.Model.extend({
     updatedAt: DS.attr('isodate'),
     tags: DS.hasMany('tag', {
         inverse: 'icons',
-        async: true
+        async: true,
     }),
+    aliases: DS.attr(),
     site: DS.belongsTo('site', {
         async: true,
         inverse: 'icons'

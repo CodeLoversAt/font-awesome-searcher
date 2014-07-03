@@ -18,8 +18,15 @@ class TagRepository extends Repository
      */
     public function findByName($search)
     {
+        $regexes = array();
+
+        foreach (explode(' ', $search) as $s) {
+            if (trim($s)) {
+                $regexes[] = new \MongoRegex('/' . $s . '/i');
+            }
+        }
         return $this->createQueryBuilder()
-            ->field('name')->equals(new \MongoRegex('/' . $search . '/'))
+            ->field('name')->in($regexes)
             ->getQuery()
             ->execute()
             ->toArray();

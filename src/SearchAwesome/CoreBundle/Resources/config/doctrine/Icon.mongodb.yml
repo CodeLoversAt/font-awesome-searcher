@@ -1,6 +1,7 @@
 SearchAwesome\CoreBundle\Document\Icon:
     repositoryClass:    SearchAwesome\CoreBundle\Repository\IconRepository
     collection:         icons
+    type:               document
 
     indexes:
         tags:
@@ -23,12 +24,11 @@ SearchAwesome\CoreBundle\Document\Icon:
             simple: true
             inversedBy: icons
 
-    referenceMany:
+    embedMany:
         tags:
-            targetDocument: SearchAwesome\CoreBundle\Document\Tag
+            targetDocument: SearchAwesome\CoreBundle\Document\TagUsage
             index:  true
             simple: true
-            inversedBy: icons
 
     fields:
         id:
@@ -36,6 +36,8 @@ SearchAwesome\CoreBundle\Document\Icon:
         name:
             type: string
         versions:
+            type: collection
+        aliases:
             type: collection
         cssClass:
             type: string

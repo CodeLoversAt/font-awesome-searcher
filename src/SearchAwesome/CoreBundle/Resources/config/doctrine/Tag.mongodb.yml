@@ -1,6 +1,7 @@
 SearchAwesome\CoreBundle\Document\Tag:
     repositoryClass:    SearchAwesome\CoreBundle\Repository\TagRepository
     collection:         tags
+    type:               document
 
     indexes:
         name:
@@ -15,23 +16,13 @@ SearchAwesome\CoreBundle\Document\Tag:
             options:
                 background: true
 
-    referenceMany:
-        icons:
-            targetDocument: SearchAwesome\CoreBundle\Document\Icon
-            mappedBy:   tags
-
     fields:
         id:
             id: true
         name:
             type: string
-        versions:
-            type: collection
-        cssClass:
-            type: string
         soundex:
             type: string
-
         created_at:
             type: date
         updated_at:

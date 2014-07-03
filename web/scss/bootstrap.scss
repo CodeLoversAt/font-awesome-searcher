@@ -23,8 +23,14 @@ body {
     > a > i {
         font-size: 24px;
     }
+}
 
-    > i {
+.sa-icon-details {
+    .preview > i {
         font-size: 50px;
     }
+}
+
+.fa-spinner {
+    font-size: 30px;
 }

@@ -9,5 +9,13 @@ App.IconController = Ember.ObjectController.extend({
 
     href: function() {
         return this.get('site').get('url') + 'icon/' + this.get('name');
-    }.property('site.url', 'name')
+    }.property('site.url', 'name'),
+
+    formattedAliases: function() {
+        return this.get('aliases').join(', ');
+    }.property('aliases'),
+
+    hasAlias: function() {
+        return this.get('aliases').length > 0;
+    }.property('aliases')
 });

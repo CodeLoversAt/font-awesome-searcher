@@ -40,6 +40,15 @@ class Icon
     protected $versions;
 
     /**
+     * @var array $aliases
+     *
+     * @JMS\Type("array<string>")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     */
+    protected $aliases = array();
+
+    /**
      * @var string $cssClass
      *
      * @JMS\Type("string")
@@ -264,8 +273,13 @@ class Icon
      */
     public function addTag(Tag $tag)
     {
-        $this->tags->add($tag);
-        $tag->getIcons()->add($this);
+        foreach ($this->tags as $tagUsage) {
+            /** @var TagUsage $tagUsage */
+            if ($tagUsage->getTagId() === $tag->getId()) {
+                return $this;
+            }
+        }
+        $this->tags->add(new TagUsage($tag));
 
         return $this;
     }
@@ -277,8 +291,12 @@ class Icon
      */
     public function removeTag(Tag $tag)
     {
-        $this->tags->removeElement($tag);
-        $tag->getIcons()->removeElement($this);
+        foreach ($this->tags as $tagUsage) {
+            /** @var TagUsage $tagUsage */
+            if ($tagUsage->getTagId() === $tag->getId()) {
+                $this->tags->removeElement($tagUsage);
+            }
+        }
 
         return $this;
     }
@@ -317,9 +335,9 @@ class Icon
     {
         $ids = array();
 
-        foreach ($this->tags as $tag) {
-            /** @var Tag $tag */
-            $ids[] = $tag->getId();
+        foreach ($this->tags as $tagUsage) {
+            /** @var TagUsage $tagUsage */
+            $ids[] = $tagUsage->getTagId();
         }
 
         return $ids;
@@ -328,5 +346,27 @@ class Icon
     public function getSiteId()
     {
         return $this->getSite()->getId();
+    }
+
+    /**
+     * @return array
+     */
+    public function getAliases()
+    {
+        return $this->aliases;
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return Icon
+     */
+    public function addAlias($alias)
+    {
+        if (!in_array($alias, $this->aliases)) {
+            $this->aliases[] = $alias;
+        }
+
+        return $this;
     }
 }

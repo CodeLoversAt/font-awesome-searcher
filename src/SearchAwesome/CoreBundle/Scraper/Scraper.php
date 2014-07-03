@@ -56,6 +56,10 @@ class Scraper
                 $icon->addTag($this->getTag($tagName));
             }
 
+            foreach ($data['aliases'] as $alias) {
+                $icon->addAlias($alias);
+            }
+
             $this->iconManager->updateIcon($icon);
         }
     }

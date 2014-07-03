@@ -102,10 +102,7 @@ class IconManager implements IconManagerInterface
      */
     public function findIconsByTagName($search)
     {
-        // find the tags
-        $tags = $this->tagRepo->findByName($search);
-
-        return $this->repo->findByTags($tags);
+        return $this->repo->findByName($search);
     }
 
     /**

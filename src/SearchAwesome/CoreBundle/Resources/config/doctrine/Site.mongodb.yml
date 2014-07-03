@@ -1,6 +1,8 @@
 SearchAwesome\CoreBundle\Document\Site:
     repositoryClass:    SearchAwesome\CoreBundle\Repository\SiteRepository
     collection:         sites
+    type:               document
+
     fields:
         id:
             id: true

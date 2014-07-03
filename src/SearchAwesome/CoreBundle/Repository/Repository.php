@@ -30,10 +30,15 @@ class Repository extends DocumentRepository
             $idsToUse[] = new \MongoId($id);
         }
 
-        return $this->createQueryBuilder()
+        $result = array();
+
+        foreach($this->createQueryBuilder()
             ->field('_id')->in($idsToUse)
             ->getQuery()
-            ->execute()
-            ->toArray();
+            ->execute() as $document) {
+            $result[] = $document;
+        }
+
+        return $result;
     }
 }
