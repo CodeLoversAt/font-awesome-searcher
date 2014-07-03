@@ -11,6 +11,7 @@ namespace SearchAwesome\ApiBundle\Controller;
 
 
 use SearchAwesome\CoreBundle\Document\Site;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -21,15 +22,19 @@ class SiteController extends RestController
     /**
      * @View(templateVar="site", serializerGroups={"REST"})
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $sites = $this->getSiteManager()->findSites();
+        $ids = $request->get('ids', array());
+        if (!is_array($ids)) {
+            $ids = array();
+        }
+        $sites = $this->getSiteManager()->findSites($ids);
 
         return $this->view($sites);
     }
 
     /**
-     * @View(templateVar="site")
+     * @View(templateVar="site", serializerGroups={"REST"})
      */
     public function getAction($id)
     {

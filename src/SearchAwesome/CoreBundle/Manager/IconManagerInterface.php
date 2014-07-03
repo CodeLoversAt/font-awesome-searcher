@@ -11,6 +11,7 @@ namespace SearchAwesome\CoreBundle\Manager;
 
 
 use SearchAwesome\CoreBundle\Document\Icon;
+use SearchAwesome\CoreBundle\Document\Site;
 
 interface IconManagerInterface
 {
@@ -33,9 +34,11 @@ interface IconManagerInterface
     /**
      * returns all icons
      *
+     * @param string[] $ids
+     *
      * @return Icon[]
      */
-    public function findIcons();
+    public function findIcons(array $ids = array());
 
     /**
      * finds all icons that match the given criteria
@@ -52,6 +55,16 @@ interface IconManagerInterface
     public function findIconsBy(array $criteria, array $orderBy = array(), $limit = null, $skip = null);
 
     /**
+     * finds alll Icon instances that have tags
+     * matching the given search term
+     *
+     * @param string $search
+     *
+     * @return Icon[]
+     */
+    public function findIconsByTagName($search);
+
+    /**
      * persists the given Icon
      *
      * @param Icon $icon
@@ -66,4 +79,29 @@ interface IconManagerInterface
      * @param boolean $andFlush
      */
     public function removeIcon(Icon $icon, $andFlush = true);
-} 
+
+    /**
+     * persist all pending changes
+     */
+    public function flushChanges();
+
+    /**
+     * finds an Icon instance with the given name
+     * and the given Site
+     *
+     * @param string $name
+     * @param Site $site
+     *
+     * @return Icon|null
+     */
+    public function findIconByName($name, $site);
+
+    /**
+     * finds an Icon instance matching the given criteria
+     *
+     * @param array $criteria
+     *
+     * @return Icon|null
+     */
+    public function findIconBy(array $criteria);
+}

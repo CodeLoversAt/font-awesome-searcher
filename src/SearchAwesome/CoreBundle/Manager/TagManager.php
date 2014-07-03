@@ -63,9 +63,9 @@ class TagManager implements TagManagerInterface
      *
      * @return Tag[]
      */
-    public function findTags()
+    public function findTags(array $ids = array())
     {
-        return $this->repo->findAll();
+        return $this->repo->findByIds($ids);
     }
 
     /**
@@ -82,6 +82,18 @@ class TagManager implements TagManagerInterface
     public function findTagsBy(array $criteria, array $orderBy = array(), $limit = null, $skip = null)
     {
         return $this->repo->findBy($criteria, $orderBy, $limit, $skip);
+    }
+
+    /**
+     * finds one Tag instance that matches the given criteria
+     *
+     * @param array $criteria
+     *
+     * @return Tag|null
+     */
+    public function findTagBy(array $criteria)
+    {
+        return $this->repo->findOneBy($criteria);
     }
 
     /**
@@ -114,5 +126,25 @@ class TagManager implements TagManagerInterface
         if (true === $andFlush) {
             $this->om->flush();
         }
+    }
+
+    /**
+     * persist all pending changes
+     */
+    public function flushChanges()
+    {
+        $this->om->flush();
+    }
+
+    /**
+     * finds one Tag instance with the given name
+     *
+     * @param string $name
+     *
+     * @return Tag|null
+     */
+    public function findTagByName($name)
+    {
+        return $this->repo->findOneBy(array('name' => $name));
     }
 }

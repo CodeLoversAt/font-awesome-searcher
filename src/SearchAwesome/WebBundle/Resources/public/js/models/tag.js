@@ -5,6 +5,7 @@
 
 App.Tag = DS.Model.extend({
     name: DS.attr('string'),
+    soundex: DS.attr('string'),
     icons: DS.hasMany('icon', {
         inverse: 'tags',
         async: true

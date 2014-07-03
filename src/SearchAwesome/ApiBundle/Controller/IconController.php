@@ -11,6 +11,7 @@ namespace SearchAwesome\ApiBundle\Controller;
 
 
 use SearchAwesome\CoreBundle\Document\Icon;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use FOS\RestBundle\Controller\Annotations\View;
@@ -21,9 +22,19 @@ class IconController extends RestController
     /**
      * @View(templateVar="icon", serializerGroups={"REST"})
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $icons = $this->getIconManager()->findIcons();
+        $search = $request->query->get('search', null);
+
+        if ($search) {
+            $icons = $this->getIconManager()->findIconsByTagName($search);
+        } else {
+            $ids = $request->query->get('ids', array());
+            if (!is_array($ids)) {
+                $ids = array();
+            }
+            $icons = $this->getIconManager()->findIcons($ids);
+        }
 
         return $this->view($icons);
     }
@@ -33,7 +44,9 @@ class IconController extends RestController
      */
     public function getAction($id)
     {
-        return $this->view($this->getIconManager()->findIcon($id));
+        $icon = $this->getIconManager()->findIcon($id);
+
+        return $this->view($icon);
     }
 
     /**

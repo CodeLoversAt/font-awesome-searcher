@@ -13,21 +13,26 @@ namespace SearchAwesome\ApiBundle\Controller;
 use SearchAwesome\CoreBundle\Document\Tag;
 use FOS\RestBundle\Controller\Annotations\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class TagController extends RestController
 {
     /**
-     * @View()
+     * @View(templateVar="tag", serializerGroups={"REST"})
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        return $this->view($this->getTagManager()->findTags());
+        $ids = $request->get('ids', array());
+        if (!is_array($ids)) {
+            $ids = array();
+        }
+        return $this->view($this->getTagManager()->findTags($ids));
     }
 
     /**
-     * @View()
+     * @View(templateVar="tag", serializerGroups={"REST"})
      */
     public function getAction($id)
     {

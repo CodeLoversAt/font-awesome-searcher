@@ -33,9 +33,11 @@ interface TagManagerInterface
     /**
      * returns all tags
      *
+     * @param array $ids optional - ids to filter
+     *
      * @return Tag[]
      */
-    public function findTags();
+    public function findTags(array $ids = array());
 
     /**
      * finds all tags that match the given criteria
@@ -52,6 +54,15 @@ interface TagManagerInterface
     public function findTagsBy(array $criteria, array $orderBy = array(), $limit = null, $skip = null);
 
     /**
+     * finds one Tag instance that matches the given criteria
+     *
+     * @param array $criteria
+     *
+     * @return Tag|null
+     */
+    public function findTagBy(array $criteria);
+
+    /**
      * persists the given Tag
      *
      * @param Tag $tag
@@ -66,4 +77,18 @@ interface TagManagerInterface
      * @param boolean $andFlush
      */
     public function removeTag(Tag $tag, $andFlush = true);
-} 
+
+    /**
+     * persist all pending changes
+     */
+    public function flushChanges();
+
+    /**
+     * finds one Tag instance with the given name
+     *
+     * @param string $name
+     *
+     * @return Tag|null
+     */
+    public function findTagByName($name);
+}

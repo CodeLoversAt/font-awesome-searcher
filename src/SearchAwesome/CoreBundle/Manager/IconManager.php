@@ -11,8 +11,10 @@ namespace SearchAwesome\CoreBundle\Manager;
 
 
 use SearchAwesome\CoreBundle\Document\Icon;
+use SearchAwesome\CoreBundle\Document\Site;
 use SearchAwesome\CoreBundle\Repository\IconRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use SearchAwesome\CoreBundle\Repository\TagRepository;
 
 class IconManager implements IconManagerInterface
 {
@@ -27,12 +29,18 @@ class IconManager implements IconManagerInterface
     private $repo;
 
     /**
+     * @var TagRepository
+     */
+    private $tagRepo;
+
+    /**
      * @param ObjectManager $om
      */
     public function __construct(ObjectManager $om)
     {
         $this->om = $om;
         $this->repo = $this->om->getRepository('SearchAwesomeCoreBundle:Icon');
+        $this->tagRepo = $this->om->getRepository('SearchAwesomeCoreBundle:Tag');
     }
 
     /**
@@ -62,9 +70,9 @@ class IconManager implements IconManagerInterface
      *
      * @return Icon[]
      */
-    public function findIcons()
+    public function findIcons(array $ids = array())
     {
-        return $this->repo->findAll();
+        return $this->repo->findByIds($ids);
     }
 
     /**
@@ -82,6 +90,22 @@ class IconManager implements IconManagerInterface
     public function findIconsBy(array $criteria, array $orderBy = array(), $limit = null, $skip = null)
     {
         return $this->repo->findBy($criteria, $orderBy, $limit, $skip);
+    }
+
+    /**
+     * finds alll Icon instances that have tags
+     * matching the given search term
+     *
+     * @param string $search
+     *
+     * @return Icon[]
+     */
+    public function findIconsByTagName($search)
+    {
+        // find the tags
+        $tags = $this->tagRepo->findByName($search);
+
+        return $this->repo->findByTags($tags);
     }
 
     /**
@@ -112,5 +136,39 @@ class IconManager implements IconManagerInterface
         if (true === $andFlush) {
             $this->om->flush();
         }
+    }
+
+    /**
+     * persist all pending changes
+     */
+    public function flushChanges()
+    {
+        $this->om->flush();
+    }
+
+    /**
+     * finds an Icon instance with the given name
+     * and the given Site
+     *
+     * @param string $name
+     * @param Site $site
+     *
+     * @return Icon|null
+     */
+    public function findIconByName($name, $site)
+    {
+        return $this->repo->findOneBy(array('site' => $site, 'name' => $name));
+    }
+
+    /**
+     * finds an Icon instance matching the given criteria
+     *
+     * @param array $criteria
+     *
+     * @return Icon|null
+     */
+    public function findIconBy(array $criteria)
+    {
+        return $this->repo->findOneBy($criteria);
     }
 }

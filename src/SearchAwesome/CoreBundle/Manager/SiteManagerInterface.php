@@ -33,9 +33,11 @@ interface SiteManagerInterface
     /**
      * returns all sites
      *
+     * @param string[] $ids
+     *
      * @return Site[]
      */
-    public function findSites();
+    public function findSites(array $ids = array());
 
     /**
      * finds all tags that match the given criteria
@@ -66,4 +68,9 @@ interface SiteManagerInterface
      * @param boolean $andFlush
      */
     public function removeSite(Site $site, $andFlush = true);
+
+    /**
+     * persist all pending changes
+     */
+    public function flushChanges();
 }

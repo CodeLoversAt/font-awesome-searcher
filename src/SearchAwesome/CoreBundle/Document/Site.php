@@ -1,26 +1,56 @@
 <?php
 
 namespace SearchAwesome\CoreBundle\Document;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use JMS\Serializer\Annotation as JMS;
 
 /**
- * Backend\CoreBundle\Document\Site
+ * SearchAwesome\CoreBundle\Document\Site
+ * @JMS\ExclusionPolicy("all")
  */
 class Site
 {
     /**
      * @var \MongoId $id
+     *
+     * @JMS\Type("string")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\ReadOnly()
      */
     protected $id;
 
     /**
      * @var string $name
+     *
+     * @JMS\Type("string")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
      */
     protected $name;
 
     /**
      * @var string $url
+     *
+     * @JMS\Type("string")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
      */
     protected $url;
+
+    /**
+     * @var Collection
+     */
+    protected $icons;
+
+    /**
+     * constructor
+     */
+    public function __construct()
+    {
+        $this->icons = new ArrayCollection();
+    }
 
 
     /**
@@ -75,5 +105,38 @@ class Site
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIcons()
+    {
+        return $this->icons;
+    }
+
+    /**
+     * @param Icon $icon
+     *
+     * @return Site
+     */
+    public function addIcon(Icon $icon)
+    {
+        $this->icons->add($icon);
+        $icon->setSite($this);
+
+        return $this;
+    }
+
+    /**
+     * @param Icon $icon
+     *
+     * @return Site
+     */
+    public function removeIcon(Icon $icon)
+    {
+        $this->icons->removeElement($icon);
+
+        return $this;
     }
 }

@@ -2,6 +2,8 @@ parameters:
     backend_core.manager.tag.class: SearchAwesome\CoreBundle\Manager\TagManager
     backend_core.manager.site.class: SearchAwesome\CoreBundle\Manager\SiteManager
     backend_core.manager.icon.class: SearchAwesome\CoreBundle\Manager\IconManager
+    backend_core.scraper.font_awesome.class: SearchAwesome\CoreBundle\Scraper\FontAwesomeScraper
+    backend_core.scraper.class: SearchAwesome\CoreBundle\Scraper\Scraper
 
 services:
     backend_core.manager.tag:
@@ -25,3 +27,9 @@ services:
     icon_manager:
         alias: backend_core.manager.icon
 
+    backend_core.scraper.font_awesome:
+        class: %backend_core.scraper.font_awesome.class%
+
+    backend_core.scraper:
+        class: %backend_core.scraper.class%
+        arguments: [@icon_manager, @tag_manager, @backend_core.scraper.font_awesome]

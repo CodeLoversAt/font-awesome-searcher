@@ -8,6 +8,13 @@ SearchAwesome\CoreBundle\Document\Icon:
                 tags: true
             options:
                 background: true
+        site_name:
+            keys:
+                site: true
+                name: true
+            options:
+                background: true
+                unique: true
 
     referenceOne:
         site:
@@ -32,10 +39,12 @@ SearchAwesome\CoreBundle\Document\Icon:
             type: collection
         cssClass:
             type: string
-        createdAt:
+        created_at:
             type: date
-        updatedAt:
+        updated_at:
             type: date
+        unicode:
+            type: string
 
     lifecycleCallbacks:
         prePersist: [prePersist]

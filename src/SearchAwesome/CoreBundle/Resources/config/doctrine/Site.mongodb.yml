@@ -10,7 +10,7 @@ SearchAwesome\CoreBundle\Document\Site:
             type: string
 
     referenceMany:
-        tags:
+        icons:
             targetDocument: SearchAwesome\CoreBundle\Document\Tag
             mappedBy:   site
 

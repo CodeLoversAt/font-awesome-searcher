@@ -7,7 +7,8 @@ use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * Backend\CoreBundle\Document\Tag
+ * SearchAwesome\CoreBundle\Document\Tag
+ * @JMS\ExclusionPolicy("all")
  */
 class Tag
 {
@@ -16,6 +17,8 @@ class Tag
      *
      * @JMS\Type("string")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\ReadOnly()
      */
     protected $id;
 
@@ -24,29 +27,34 @@ class Tag
      *
      * @JMS\Type("string")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
      */
     protected $name;
 
     /**
      * @var \DateTime $created_at
      *
-     * @JMS\Type("DateTime<'u'>")
+     * @JMS\Type("DateTime<'c'>")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\SerializedName("createdAt")
      */
     protected $created_at;
 
     /**
      * @var \DateTime $updated_at
      *
-     * @JMS\Type("DateTime<'u'>")
+     * @JMS\Type("DateTime<'c'>")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\SerializedName("updatedAt")
      */
     protected $updated_at;
 
     /**
      * @var Collection
      *
-     * @JMS\Type("ArrayCollection<Backend\CoreBundle\Document\Icon>")
+     * @JMS\Type("ArrayCollection<SearchAwesome\CoreBundle\Document\Icon>")
      */
     protected $icons;
 
@@ -54,6 +62,11 @@ class Tag
      * soundex value for searching
      *
      * @var string
+     *
+     * @JMS\Type("string")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\ReadOnly()
      */
     private $soundex;
 
@@ -83,6 +96,10 @@ class Tag
      */
     public function setName($name)
     {
+        if ($name !== $this->name) {
+            $this->soundex = soundex($name);
+        }
+
         $this->name = $name;
         return $this;
     }
@@ -181,5 +198,15 @@ class Tag
     public function getSoundex()
     {
         return $this->soundex;
+    }
+
+    public function prePersist()
+    {
+        $this->setCreatedAt(new \DateTime());
+    }
+
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime());
     }
 }

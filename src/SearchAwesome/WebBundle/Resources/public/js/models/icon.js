@@ -5,8 +5,9 @@
 App.Icon = DS.Model.extend({
     name: DS.attr('string'),
     cssClass: DS.attr('string'),
-    createdAt: DS.attr('date'),
-    updatedAt: DS.attr('date'),
+    unicode: DS.attr('string'),
+    createdAt: DS.attr('isodate'),
+    updatedAt: DS.attr('isodate'),
     tags: DS.hasMany('tag', {
         inverse: 'icons',
         async: true

@@ -6,7 +6,8 @@ use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * Backend\CoreBundle\Document\Icon
+ * SearchAwesome\CoreBundle\Document\Icon
+ * @JMS\ExclusionPolicy("all")
  */
 class Icon
 {
@@ -15,6 +16,8 @@ class Icon
      *
      * @JMS\Type("string")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\ReadOnly()
      */
     protected $id;
 
@@ -23,6 +26,7 @@ class Icon
      *
      * @JMS\Type("string")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
      */
     protected $name;
 
@@ -31,6 +35,7 @@ class Icon
      *
      * @JMS\Type("array<string>")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
      */
     protected $versions;
 
@@ -39,32 +44,59 @@ class Icon
      *
      * @JMS\Type("string")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\SerializedName("cssClass")
      */
     protected $cssClass;
 
     /**
      * @var \DateTime $created_at
      *
-     * @JMS\Type("DateTime<'u'>")
+     * @JMS\Type("DateTime<'c'>")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\SerializedName("createdAt")
      */
     protected $created_at;
 
     /**
      * @var \DateTime $updated_at
      *
-     * @JMS\Type("DateTime<'u'>")
+     * @JMS\Type("DateTime<'c'>")
      * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\SerializedName("updatedAt")
      */
     protected $updated_at;
 
     /**
+     * @var string
+     *
+     * @JMS\Type("string")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     */
+    protected $unicode;
+
+    /**
      * @var Collection
+     *
+     * @JMS\Type("array<string>")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\Accessor(getter="getTagIds")
+     * @JMS\ReadOnly()
      */
     protected $tags;
 
     /**
      * @var Site
+     *
+     * @JMS\Type("string")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\Accessor(getter="getSiteId")
+     * @JMS\ReadOnly()
      */
     protected $site;
 
@@ -198,7 +230,7 @@ class Icon
     }
 
     /**
-     * @return \Backend\CoreBundle\Document\Site
+     * @return \SearchAwesome\CoreBundle\Document\Site
      */
     public function getSite()
     {
@@ -206,7 +238,7 @@ class Icon
     }
 
     /**
-     * @param \Backend\CoreBundle\Document\Site $site
+     * @param \SearchAwesome\CoreBundle\Document\Site $site
      *
      * @return Icon
      */
@@ -253,11 +285,48 @@ class Icon
 
     public function prePersist()
     {
-        $this->created_at = new \DateTime();
+        $this->setCreatedAt(new \DateTime());
     }
 
     public function preUpdate()
     {
-        $this->updated_at = new \DateTime();
+        $this->setUpdatedAt(new \DateTime());
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnicode()
+    {
+        return $this->unicode;
+    }
+
+    /**
+     * @param string $unicode
+     *
+     * @return Icon
+     */
+    public function setUnicode($unicode)
+    {
+        $this->unicode = $unicode;
+
+        return $this;
+    }
+
+    public function getTagIds()
+    {
+        $ids = array();
+
+        foreach ($this->tags as $tag) {
+            /** @var Tag $tag */
+            $ids[] = $tag->getId();
+        }
+
+        return $ids;
+    }
+
+    public function getSiteId()
+    {
+        return $this->getSite()->getId();
     }
 }

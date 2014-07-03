@@ -32,3 +32,11 @@ SearchAwesome\CoreBundle\Document\Tag:
         soundex:
             type: string
 
+        created_at:
+            type: date
+        updated_at:
+            type: date
+
+    lifecycleCallbacks:
+        prePersist: [prePersist]
+        preUpdate: [preUpdate]

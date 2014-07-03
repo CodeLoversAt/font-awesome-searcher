@@ -2,3 +2,29 @@
 @import "../bower/bootstrap-sass/vendor/assets/stylesheets/bootstrap.scss";
 @import "fonts";
 @import "../bower/font-awesome/scss/font-awesome.scss";
+
+body {
+    padding-top: 71px;
+}
+
+.navbar-inverse {
+    .navbar-nav {
+        > li {
+            > .active {
+                color: $navbar-inverse-link-active-color;
+                background-color: $navbar-inverse-link-active-bg;
+            }
+        }
+    }
+}
+
+.sa-icon {
+    text-align: center;
+    > a > i {
+        font-size: 24px;
+    }
+
+    > i {
+        font-size: 50px;
+    }
+}

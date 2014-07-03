@@ -60,11 +60,13 @@ class SiteManager implements SiteManagerInterface
     /**
      * returns all sites
      *
+     * @param string[] $ids
+     *
      * @return Site[]
      */
-    public function findSites()
+    public function findSites(array $ids = array())
     {
-        return $this->repo->findAll();
+        return $this->repo->findByIds($ids);
     }
 
     /**
@@ -112,5 +114,13 @@ class SiteManager implements SiteManagerInterface
         if (true === $andFlush) {
             $this->om->flush();
         }
+    }
+
+    /**
+     * persist all pending changes
+     */
+    public function flushChanges()
+    {
+        $this->om->flush();
     }
 }
