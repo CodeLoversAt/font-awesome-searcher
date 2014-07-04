@@ -1,27 +1,29 @@
 /**
  * Created by daniel on 02.07.14.
  */
-window.App = Ember.Application.create();
 
+(function() {
+    var app = angular.module('searchAwesome', ['iconControllers', 'ngRoute', 'helpers', 'navbar', 'tagControllers']);
 
-App.IsodateTransform = DS.Transform.extend({
-    deserialize: function (serialized) {
-        if (serialized) {
-            return moment(serialized).toDate();
-        }
-
-        return serialized;
-    },
-
-    serialize: function (deserialized) {
-        if (deserialized) {
-            return moment(deserialized).format();
-        }
-
-        return deserialized
-    }
-});
-
-DS.RESTAdapter.reopen({
-    namespace: 'api'
-});
+    app.config(['$routeProvider', function ($routeProvider) {
+        $routeProvider
+            .when('/icons', {
+                templateUrl: 'partials/icon-list.html',
+                controller: 'IconsController',
+                controllerAs: 'iconsCtrl'
+            })
+            .when('/icons/:iconId', {
+                templateUrl: 'partials/icon-detail.html',
+                controller: 'IconDetailController',
+                controllerAs: 'iconCtrl'
+            })
+            .when('/tags', {
+                templateUrl: 'partials/tag-list.html',
+                controller: 'TagsController',
+                controllerAs: 'tagsCtrl'
+            })
+            .otherwise({
+                redirectTo: '/icons'
+            });
+    }]);
+})();

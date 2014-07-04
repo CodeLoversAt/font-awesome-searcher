@@ -15,13 +15,17 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1",
+    "jquery": "1.10.2",
+    "angular": "~1.2",
+    "angular-mocks": "~1.2.x",
+    "angular-route": "~1.2.x",
+    "angular-resource": "~1.2.x",
+    "angular-animate": "~1.2.x",
+    "angular-bootstrap": "~0.11.0",
     "bootstrap-sass": "twbs/bootstrap-sass#~3.1.1",
     "font-awesome": "~4",
     "jquery.gritter": "*",
-    "ember": "~1.5.1",
-    "ember-data": "~1.0.0-beta.4",
     "moment": "~2.7.0",
-    "ember-addons.bs_for_ember": "~0.7.0"
+    "angular-ui-utils": "bower-event"
   }
 }

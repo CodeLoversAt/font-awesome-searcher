@@ -35,7 +35,7 @@ class JsonHandler
 
     public function createResponse(ViewHandler $handler, View $view, Request $request)
     {
-        $json = $this->serializer->serialize(array($view->getTemplateVar() => $view->getData()), 'json', $view->getSerializationContext());
+        $json = $this->serializer->serialize($view->getData(), 'json', $view->getSerializationContext());
 
         return new Response($json, Codes::HTTP_OK, $view->getHeaders());
     }

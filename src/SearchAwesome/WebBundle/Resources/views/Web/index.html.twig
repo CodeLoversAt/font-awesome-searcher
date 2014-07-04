@@ -1,123 +1,42 @@
 {% extends "SearchAwesomeWebBundle::layout.html.twig" %}
 
 {% block styles %}
-    {% stylesheets output='compiled/css/app.css' filter='cssrewrite' debug=false
-    'bower/ember-addons.bs_for_ember/dist/css/bs-growl-notifications.min.css'
-    %}
-    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    {#{% stylesheets output='compiled/css/app.css' filter='cssrewrite' debug=false#}
+    {#%}#}
+    {#<link rel="stylesheet" type="text/css" href="{{ asset_url }}" />#}
+    {#{% endstylesheets %}#}
 {% endblock styles %}
 
 {% block body %}
-    <script type="text/x-handlebars">
-        {% raw %}
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    {{#link-to 'icons' class='navbar-brand'}}SearchAwesome{{/link-to}}
-                </div>
-                <div class="collapse navbar-collapse" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            {{#link-to 'icons'}}Icons{{/link-to}}
-                        </li>
-                        <li>
-                            {{#link-to 'tags'}}Tags{{/link-to}}
-                        </li>
-                    </ul>
-                </div>
+    {% raw %}
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-controller="NavController as nav">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="#/" class="navbar-brand">SearchAwesome</a>
             </div>
-        </nav>
-
-        <div class="container">{{outlet}}</div>
-        {% endraw %}
-    </script>
-
-    <script type="text/x-handlebars" id="icons">
-        {% raw %}
-
-
-        <div class="page-header">
-            <div class="row">
-                <div class="col-lg-1 col-md-1 col-sm-2">
-                    {{#if isSearching}}<i class="fa fa-spinner fa-spin"></i>{{/if}}
-                </div>
-                <div class="col-lg-10 col-md-10 col-sm-8">
-                    {{input type="text" class="form-control" value=searchText placeholder="Search for icons"}}
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-2">
-                    {{bs-button type="default" icon="fa fa-times" clicked="resetSearch" clickedParamBindings="controller" bs-bind-tooltip="A tooltip!"}}
-                </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li data-ng-class="{ 'active':nav.selectedTab('icons') }">
+                        <a href="#/">Icons</a>
+                    </li>
+                    <li data-ng-class="{ 'active':nav.selectedTab('tags') }">
+                        <a href="#/tags">Tags</a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="row">
-            {{#each searchResults itemController="icon"}}
-            <div class="col-md-2 col-sm-3 col-xs-4 sa-icon">
-                {{#link-to 'icon' this}}
-                    <i {{bind-attr class=":fa iconClass"}}></i>
-                    <p class="clearfix">
-                        {{name}}
-                    </p>
-                {{/link-to}}
-            </div>
-            {{/each}}
-        </div>
-        {% endraw %}
-    </script>
+    </nav>
 
-    <script type="text/x-handlebars" id="icon">
-        {% raw %}
-        <article class="sa-icon-details">
-            <div class="row">
-                <div class="col-md-3 preview text-center">
-                    <i {{bind-attr class=":fa iconClass"}}></i>
-                    <h3>{{ name }}</h3>
-                </div>
-                <div class="col-md-9">
-                    <dl class="dl-horizontal">
-                        <dt>CSS-Class</dt>
-                        <dd>{{ cssClass }}</dd>
-                        <dt>Unicode</dt>
-                        <dd>{{ unicode }}</dd>
-                        <dt>Details</dt>
-                        <dd><a {{bind-attr href="href"}} target="_blank">{{ href }}</a></dd>
-                        {{#if hasAlias}}
-                        <dt>Aliases</dt>
-                        <dd>
-                            {{formattedAliases}}
-                        </dd>
-                        {{/if}}
-                        <dt>Tags</dt>
-                        <dd>
-                            <ul class="list-inline">{{#each tags}}<li>{{bs-label content=name type="info"}}</li>{{/each}}</ul>
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-        </article>
-        {% endraw %}
-    </script>
-
-    <script type="text/x-handlebars" id="tags">
-        {% raw %}
-        <div class="row">
-            <ul class="list-inline">
-                {{#each}}
-                    <li>{{ name }}</li>
-                {{/each}}
-            </ul>
-        </div>
-        {% endraw %}
-    </script>
-
-    <script type="text/x-handlebars" id="components/font-awesome-icon">
-    </script>
+    <div class="container">
+        <div data-ng-view></div>
+    </div>
+    {% endraw %}
 {% endblock body %}
 
 {% block scripts %}
@@ -127,25 +46,23 @@
     <script type="text/javascript" defer="defer" src="{{ asset('bower/moment/lang/' ~ app.request.locale ~ '.js') }}"></script>
     {% endif %}
     {% javascripts output='compiled/js/app.js' debug=false
-    'bower/jquery/dist/jquery.js'
-    'bower/handlebars/handlebars.js'
-    'bower/ember/ember.prod.js'
-    'bower/ember-data/ember-data.prod.js'
+    'bower/jquery/jquery.js'
     'bower/moment/min/moment-with-langs.js'
-    'bower/ember-addons.bs_for_ember/dist/js/bs-core.min.js'
-    'bower/ember-addons.bs_for_ember/dist/js/bs-modal.min.js'
-    'bower/ember-addons.bs_for_ember/dist/js/bs-popover.min.js'
-    'bower/ember-addons.bs_for_ember/dist/js/bs-growl-notifications.min.js'
-    'bower/ember-addons.bs_for_ember/dist/js/bs-badge.min.js'
-    'bower/ember-addons.bs_for_ember/dist/js/bs-label.min.js'
-    'bower/ember-addons.bs_for_ember/dist/js/bs-button.min.js'
+    'bower/angular/angular.js'
+    'bower/angular-bootstrap/ui-bootstrap-tpls.js'
+    'bower/angular-resource/angular-resource.js'
+    'bower/angular-route/angular-route.js'
+    'bower/angular-mocks/angular-mocks.js'
+    'bower/angular-animate/angular-animate.js'
+    'bower/angular-ui-utils/event.js'
     '@SearchAwesomeWebBundle/Resources/public/js/app.js'
-    '@SearchAwesomeWebBundle/Resources/public/js/router.js'
-    '@SearchAwesomeWebBundle/Resources/public/js/models/icon.js'
-    '@SearchAwesomeWebBundle/Resources/public/js/models/site.js'
-    '@SearchAwesomeWebBundle/Resources/public/js/models/tag.js'
-    '@SearchAwesomeWebBundle/Resources/public/js/controllers/icon_controller.js'
-    '@SearchAwesomeWebBundle/Resources/public/js/controllers/icons_controller.js'
+    '@SearchAwesomeWebBundle/Resources/public/js/directives/helpers.js'
+    '@SearchAwesomeWebBundle/Resources/public/js/services/icon.js'
+    '@SearchAwesomeWebBundle/Resources/public/js/services/site.js'
+    '@SearchAwesomeWebBundle/Resources/public/js/services/tag.js'
+    '@SearchAwesomeWebBundle/Resources/public/js/controllers/nav.js'
+    '@SearchAwesomeWebBundle/Resources/public/js/controllers/icons.js'
+    '@SearchAwesomeWebBundle/Resources/public/js/controllers/tags.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript" defer="defer"></script>
     {% endjavascripts %}

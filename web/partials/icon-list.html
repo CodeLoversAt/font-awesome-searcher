@@ -1,0 +1,25 @@
+<div class="page-header">
+    <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-2">
+            <i class="fa fa-spinner fa-spin" data-ng-show="iconsCtrl.loading"></i>
+        </div>
+        <div class="col-lg-10 col-md-10 col-sm-8">
+            <input type="search" data-ng-model="search" placeholder="Search for icons" class="form-control" ui-event="{ keyup: 'iconsCtrl.onKeyup($event)' }" />
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-2">
+            <button type="button" class="btn btn-default" data-toggle="tooltip" title="Reset search" data-ng-click="iconsCtrl.reset()">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-sm-3 col-xs-4 sa-icon" data-ng-repeat="icon in icons">
+        <a href="#/icons/{{ icon.id }}">
+            <i class="fa {{ icon.cssClass }}"></i>
+            <p class="clearfix">
+                {{ icon.name }}
+            </p>
+        </a>
+    </div>
+</div>

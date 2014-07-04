@@ -1,0 +1,28 @@
+<article class="sa-icon-details">
+    <div class="row">
+        <div class="col-md-3 preview text-center">
+            <i class="fa {{ iconCtrl.icon.cssClass }}"></i>
+            <h3>{{ iconCtrl.icon.name }}</h3>
+        </div>
+        <div class="col-md-9">
+            <dl class="dl-horizontal">
+                <dt>CSS-Class</dt>
+                <dd>{{ iconCtrl.icon.cssClass }}</dd>
+                <dt>Unicode</dt>
+                <dd>{{ iconCtrl.icon.unicode }}</dd>
+                <dt>Details</dt>
+                <dd><a href="{{ iconCtrl.href() }}" target="_blank">{{ iconCtrl.href() }}</a></dd>
+                <dt data-ng-show="iconCtrl.icon.aliases.length">Aliases</dt>
+                <dd data-ng-show="iconCtrl.icon.aliases.length">
+                    {{iconCtrl.icon.aliases.join(', ')}}
+                </dd>
+                <dt>Tags</dt>
+                <dd>
+                    <ul class="list-inline">
+                        <li data-ng-repeat="tag in iconCtrl.tags"><span class="label label-info">{{ tag.name }}</span></li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</article>
