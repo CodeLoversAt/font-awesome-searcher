@@ -40,6 +40,16 @@ class Site
     protected $url;
 
     /**
+     * @var string $url
+     *
+     * @JMS\Type("string")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\SerializedName("detailsPath")
+     */
+    protected $detailsPath;
+
+    /**
      * @var Collection
      */
     protected $icons;
@@ -136,6 +146,26 @@ class Site
     public function removeIcon(Icon $icon)
     {
         $this->icons->removeElement($icon);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDetailsPath()
+    {
+        return $this->detailsPath;
+    }
+
+    /**
+     * @param string $detailsPath
+     *
+     * @return Site
+     */
+    public function setDetailsPath($detailsPath)
+    {
+        $this->detailsPath = $detailsPath;
 
         return $this;
     }

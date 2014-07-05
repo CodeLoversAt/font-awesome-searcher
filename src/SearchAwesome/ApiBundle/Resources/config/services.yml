@@ -1,5 +1,9 @@
 parameters:
     backend_api.handler.json.class: SearchAwesome\ApiBundle\Handler\JsonHandler
+    backend_api.form.type.tag.class: SearchAwesome\ApiBundle\Form\Type\TagType
+    backend_api.form.type.deleteTag.class: SearchAwesome\ApiBundle\Form\Type\DeleteTagType
+    backend_api.form.type.recaptcha.class: SearchAwesome\ApiBundle\Form\Type\RecaptchaType
+    backend_api.validator.recaptcha.class: SearchAwesome\ApiBundle\Validator\Constraints\RecaptchaValidator
 
 services:
     backend_api.handler.json:
@@ -10,3 +14,26 @@ services:
         parent: fos_rest.view_handler.default
         calls:
             - ['registerHandler', ['json', ['@backend_api.handler.json', 'createResponse']]]
+
+    backend_api.form.type.tag:
+        class:  %backend_api.form.type.tag.class%
+        arguments: [%recaptcha_session_key%, @session, @security.context]
+        tags:
+            - { name: form.type, alias: sa_tag }
+
+    backend_api.form.type.deleteTag:
+        class:  %backend_api.form.type.deleteTag.class%
+        arguments: [%recaptcha_session_key%, @session, @security.context]
+        tags:
+            - { name: form.type, alias: delete_tag }
+
+    backend_api.form.recaptcha.tag:
+        class:  %backend_api.form.type.recaptcha.class%
+        tags:
+            - { name: form.type, alias: recaptcha }
+
+    backend_api.validator.recaptcha:
+        class: %backend_api.validator.recaptcha.class%
+        arguments: [%recaptcha_private_key%, %recaptcha_session_key%, @request_stack]
+        tags:
+            - { name: validator.constraint_validator, alias: recaptcha_validator }

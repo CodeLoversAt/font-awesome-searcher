@@ -5,10 +5,15 @@ namespace SearchAwesome\CoreBundle\Document;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as JMS;
+use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
+use SearchAwesome\ApiBundle\Form\Model\Recaptcha;
+use Symfony\Component\Validator\Constraints as Assert;
+use SearchAwesome\ApiBundle\Validator\Constraints\Recaptcha as Captcha;
 
 /**
  * SearchAwesome\CoreBundle\Document\Tag
  * @JMS\ExclusionPolicy("all")
+ * @MongoDBUnique(fields={"name"}, message="tag.alreadyExists", groups={"newTag"})
  */
 class Tag
 {
@@ -28,8 +33,31 @@ class Tag
      * @JMS\Type("string")
      * @JMS\Groups({"REST"})
      * @JMS\Expose()
+     * @JMS\Accessor(setter="setName")
+     * @Assert\Type("string", groups={"newTag", "assignTag"})
+     * @Assert\NotBlank(groups={"newTag", "assignTag"})
      */
     protected $name;
+
+    /**
+     * @var Recaptcha
+     *
+     * @Captcha(groups={"captcha"})
+     */
+    private $recaptcha;
+
+    /**
+     * whether or not this tag has been validated by an admi
+     *
+     * @var boolean
+     *
+     * @JMS\Type("boolean")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\ReadOnly()
+     * @JMS\SerializedName("isValidated")
+     */
+    private $validated = false;
 
     /**
      * @var \DateTime $created_at
@@ -159,5 +187,45 @@ class Tag
     public function preUpdate()
     {
         $this->setUpdatedAt(new \DateTime());
+    }
+
+    /**
+     * @return \SearchAwesome\ApiBundle\Form\Model\Recaptcha
+     */
+    public function getRecaptcha()
+    {
+        return $this->recaptcha;
+    }
+
+    /**
+     * @param \SearchAwesome\ApiBundle\Form\Model\Recaptcha $recaptcha
+     *
+     * @return Tag
+     */
+    public function setRecaptcha(Recaptcha $recaptcha)
+    {
+        $this->recaptcha = $recaptcha;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isValidated()
+    {
+        return $this->validated;
+    }
+
+    /**
+     * @param boolean $validated
+     *
+     * @return Tag
+     */
+    public function setValidated($validated)
+    {
+        $this->validated = $validated == true;
+
+        return $this;
     }
 }

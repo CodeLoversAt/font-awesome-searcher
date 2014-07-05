@@ -53,7 +53,7 @@ class Scraper
                 ->setUnicode($data['unicode']);
 
             foreach ($data['tags'] as $tagName) {
-                $icon->addTag($this->getTag($tagName));
+                $icon->addTag($this->getTag($tagName), true);
             }
 
             foreach ($data['aliases'] as $alias) {
@@ -73,7 +73,8 @@ class Scraper
     {
         if (!($tag = $this->tagManager->findTagByName($name))) {
             $tag = $this->tagManager->createTag();
-            $tag->setName($name);
+            $tag->setName($name)
+                ->setValidated(true);
             $this->tagManager->updateTag($tag);
         }
 

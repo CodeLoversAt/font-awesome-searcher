@@ -41,6 +41,18 @@ class TagUsage
     private $soundex;
 
     /**
+     * whether or not this tag has been validated by an admi
+     *
+     * @var boolean
+     */
+    private $validated = false;
+
+    /**
+     * @var boolean
+     */
+    private $deleted = false;
+
+    /**
      * @param Tag $tag
      */
     public function __construct(Tag $tag)
@@ -130,4 +142,44 @@ class TagUsage
     {
         return $this->tagId;
     }
-} 
+
+    /**
+     * @return boolean
+     */
+    public function isValidated()
+    {
+        return $this->validated;
+    }
+
+    /**
+     * @param boolean $validated
+     *
+     * @return Tag
+     */
+    public function setValidated($validated)
+    {
+        $this->validated = $validated == true;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * @param boolean $deleted
+     *
+     * @return TagUsage
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted == true;
+
+        return $this;
+    }
+}

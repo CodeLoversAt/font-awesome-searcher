@@ -1,0 +1,9 @@
+SearchAwesome\CoreBundle\Document\User:
+    repositoryClass:    SearchAwesome\CoreBundle\Repository\UserRepository
+    collection:         users
+    type:               document
+
+    fields:
+        id:
+            id: true
+

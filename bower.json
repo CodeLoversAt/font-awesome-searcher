@@ -26,6 +26,8 @@
     "font-awesome": "~4",
     "jquery.gritter": "*",
     "moment": "~2.7.0",
-    "angular-ui-utils": "bower-event"
+    "angular-ui-utils": "bower-event",
+    "angular-recaptcha": "~1.0.1",
+    "angular-ui-router": "~0.2.10"
   }
 }

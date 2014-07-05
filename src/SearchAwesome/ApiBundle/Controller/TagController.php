@@ -15,7 +15,10 @@ use FOS\RestBundle\Controller\Annotations\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use FOS\RestBundle\Controller\Annotations\NoRoute;
 
 class TagController extends RestController
 {
@@ -42,16 +45,28 @@ class TagController extends RestController
     /**
      * @param Tag $tag
      *
-     * @ParamConverter("tag", converter="fos_rest.request_body")
+     * @ParamConverter("newTag", converter="fos_rest.request_body", options={"validator"={"groups"={"newTag"}}})
+     * @NoRoute
      */
     public function postAction(Tag $tag, ConstraintViolationListInterface $validationErrors)
     {
         if (0 === count($validationErrors)) {
             $this->getTagManager()->updateTag($tag);
 
-            $view = $this->routeRedirectView('get_tag', array('id' => $tag->getId()));
+            $view = $this->view($tag);
         } else {
-            throw new HttpException(400, 'User is not valid');
+            $errors = array();
+
+            foreach ($validationErrors as $error) {
+                /** @var ConstraintViolationInterface $error */
+                $propertyPath = $error->getPropertyPath();
+                if (!array_key_exists($propertyPath, $errors)) {
+                    $errors[$propertyPath] = array();
+                }
+                $errors[$propertyPath][] = $this->get('translator')->trans($error->getMessageTemplate(), $error->getMessageParameters(), 'validators');
+            }
+
+            $view = $this->view(array('errors' => $errors), 400);
         }
 
         return $view;

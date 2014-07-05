@@ -2,6 +2,14 @@ SearchAwesome\CoreBundle\Document\TagUsage:
     collection:         sites
     type:               embeddedDocument
 
+    indexes:
+        deleted:
+            keys:
+                deleted: 1
+        validated:
+            keys:
+                validated: 0
+
     fields:
         name:
             type: string
@@ -9,6 +17,10 @@ SearchAwesome\CoreBundle\Document\TagUsage:
             type: string
         tagId:
             type: id
+        validated:
+            type: boolean
+        deleted:
+            type: boolean
 
     referenceOne:
         tag:

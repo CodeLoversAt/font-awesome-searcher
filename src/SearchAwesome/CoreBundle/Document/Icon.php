@@ -268,10 +268,11 @@ class Icon
 
     /**
      * @param Tag $tag
+     * @param bool $validated
      *
      * @return Icon
      */
-    public function addTag(Tag $tag)
+    public function addTag(Tag $tag, $validated = false)
     {
         foreach ($this->tags as $tagUsage) {
             /** @var TagUsage $tagUsage */
@@ -279,7 +280,9 @@ class Icon
                 return $this;
             }
         }
-        $this->tags->add(new TagUsage($tag));
+        $usage = new TagUsage($tag);
+        $usage->setValidated($validated);
+        $this->tags->add($usage);
 
         return $this;
     }
@@ -289,12 +292,16 @@ class Icon
      *
      * @return Icon
      */
-    public function removeTag(Tag $tag)
+    public function removeTag(Tag $tag, $force = false)
     {
         foreach ($this->tags as $tagUsage) {
             /** @var TagUsage $tagUsage */
             if ($tagUsage->getTagId() === $tag->getId()) {
-                $this->tags->removeElement($tagUsage);
+                if (true === $force) {
+                    $this->tags->removeElement($tagUsage);
+                } else {
+                    $tagUsage->setDeleted(true);
+                }
             }
         }
 
@@ -335,7 +342,9 @@ class Icon
     {
         $ids = array();
 
-        foreach ($this->tags as $tagUsage) {
+        foreach ($this->tags->filter(function(TagUsage $u) {
+            return !$u->isDeleted();
+        }) as $tagUsage) {
             /** @var TagUsage $tagUsage */
             $ids[] = $tagUsage->getTagId();
         }

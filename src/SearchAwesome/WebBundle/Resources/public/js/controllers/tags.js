@@ -4,11 +4,11 @@
 (function() {
     "use strict";
 
-    var app = angular.module('tagControllers', ['tagService']);
+    var app = angular.module('tagControllers', ['tagList']);
 
-    app.controller('TagsController', ['$scope', '$rootScope', 'Tag', function ($scope, $rootScope, Tag) {
+    app.controller('TagsController', ['$scope', '$rootScope', 'tagListService', function ($scope, $rootScope, tagListService) {
         $rootScope.currentTab = 'tags';
 
-        $scope.tags = Tag.query();
+        $scope.model = tagListService.model;
     }]);
 })();

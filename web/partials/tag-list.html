@@ -1,5 +1,7 @@
-<div class="row">
-    <ul class="list-inline">
-        <li data-ng-repeat="tag in tags">{{ tag.name }}</li>
-    </ul>
+<div class="container">
+    <div class="row">
+        <ul class="list-inline">
+            <li data-ng-repeat="tag in model.tags"><span class="label label-info">{{ tag.name }}</span></li>
+        </ul>
+    </div>
 </div>

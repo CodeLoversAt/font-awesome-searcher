@@ -27,6 +27,8 @@ SearchAwesome\CoreBundle\Document\Tag:
             type: date
         updated_at:
             type: date
+        validated:
+            type: boolean
 
     lifecycleCallbacks:
         prePersist: [prePersist]

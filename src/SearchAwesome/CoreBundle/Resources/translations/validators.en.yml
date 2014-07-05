@@ -1,0 +1,5 @@
+tag:
+    alreadyExists: 'This tag already exists.'
+
+recaptcha:
+    invalid: 'Please enter the displayed words.'

@@ -33,3 +33,7 @@ parameters:
     opcache_host_ip:    ~
 
     app_domain:     ~
+
+    recaptcha_public_key:   ~
+    recaptcha_private_key:  ~
+    recaptcha_session_key:  _recaptcha_valid

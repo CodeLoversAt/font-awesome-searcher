@@ -37,6 +37,6 @@ class JsonHandler
     {
         $json = $this->serializer->serialize($view->getData(), 'json', $view->getSerializationContext());
 
-        return new Response($json, Codes::HTTP_OK, $view->getHeaders());
+        return new Response($json, $view->getStatusCode(), $view->getHeaders());
     }
 } 

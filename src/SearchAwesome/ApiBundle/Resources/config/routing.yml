@@ -1,14 +1,28 @@
 tags:
     type:       rest
     resource:   SearchAwesome\ApiBundle\Controller\TagController
-    prefix:     api
 
 icons:
     type:       rest
     resource:   SearchAwesome\ApiBundle\Controller\IconController
-    prefix:     api
 
 sites:
     type:       rest
     resource:   SearchAwesome\ApiBundle\Controller\SiteController
-    prefix:     api
+
+post_tag:
+    pattern:    /tags.{_format}
+    defaults: { _controller: SearchAwesomeApiBundle:Tag:post, _format: 'json' }
+    requirements: { _format: 'json' }
+    methods: [ 'POST' ]
+
+post_icon_tag:
+    pattern:    /icons/{id}/tags.{_format}
+    defaults: { _controller: SearchAwesomeApiBundle:Icon:postTag, _format: 'json' }
+    requirements: { _format: 'json', id: "[a-z0-9]+" }
+    methods: [ 'POST' ]
+
+after_login:
+    pattern:    /after_login
+    defaults: { _controller: SearchAwesomeApiBundle:Login:login, _format: 'json' }
+    requirements: { _format: 'json' }

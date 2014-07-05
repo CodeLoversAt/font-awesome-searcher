@@ -1,0 +1,20 @@
+<iframe src="sink.html" name="sink" style="display: none"></iframe>
+
+<div class="container">
+    <form name="loginForm" action="sink.html" target="sink" method="post" class="form-signin" role="form"
+          data-ng-submit="login(credentials)" novalidate form-autofill-fix>
+
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="hidden" value="/api/after_login" name="_target_path" data-ng-model="credentials.targetPath" />
+        <input type="email" class="form-control" placeholder="E-mail address" data-ng-model="credentials.email" required autofocus />
+        <input type="password" class="form-control" placeholder="Your password" data-ng-model="credentials.password" required />
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="on" data-ng-model="credentials.rememberMe" /> Keep me logged in
+            </label>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+</div>

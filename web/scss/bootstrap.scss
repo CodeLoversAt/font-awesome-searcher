@@ -20,9 +20,25 @@ body {
 
 .sa-icon {
     text-align: center;
-    > a > i {
-        font-size: 24px;
+    > a {
+        color: $text-color;
+        display: block;
+        padding: 20px 0;
+        background: $gray-lighter;
+        > i {
+            font-size: 24px;
+        }
     }
+
+    .caption {
+        a {
+            color: $thumbnail-caption-color;
+        }
+    }
+
+    min-height: 140px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 .sa-icon-details {
@@ -33,4 +49,14 @@ body {
 
 .fa-spinner {
     font-size: 30px;
+}
+
+a {
+    cursor: pointer;
+}
+
+.label {
+    a {
+        color: $label-color;
+    }
 }

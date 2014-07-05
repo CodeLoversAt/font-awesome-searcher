@@ -10,6 +10,8 @@ SearchAwesome\CoreBundle\Document\Site:
             type: string
         url:
             type: string
+        detailsPath:
+            type: string
 
     referenceMany:
         icons:
