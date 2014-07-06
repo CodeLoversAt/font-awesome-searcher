@@ -109,6 +109,9 @@ class Tag
      */
     public function setName($name)
     {
+        // make sure it is lower case
+        $name = strtolower($name);
+
         if ($name !== $this->name) {
             $this->soundex = soundex($name);
         }

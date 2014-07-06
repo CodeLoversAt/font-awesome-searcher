@@ -20,9 +20,11 @@ class IconRepository extends Repository
     public function findByName($search)
     {
         $keywords = explode(' ', $search);
+        $regexes = array();
         $soundexes = array();
 
         foreach ($keywords as $keyword) {
+            $regexes[] = new \MongoRegex('/^' . strtolower($keyword) . '/');
             $soundex = soundex($keyword);
             if (!in_array($soundex, $soundexes)) {
                 $soundexes[] = $soundex;
@@ -32,7 +34,7 @@ class IconRepository extends Repository
         $result = array();
 
         $qb = $this->createQueryBuilder();
-        $qb->addOr($qb->expr()->field('tags.name')->all($keywords)->field('tags.deleted')->equals(false));
+        $qb->addOr($qb->expr()->field('tags.name')->all($regexes)->field('tags.deleted')->equals(false));
         $qb->addOr($qb->expr()->field('tags.soundex')->all($soundexes)->field('tags.deleted')->equals(false));
 
         foreach ($qb->getQuery()->execute() as $icon) {
