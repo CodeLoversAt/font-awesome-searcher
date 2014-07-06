@@ -9,7 +9,6 @@
 
 {% block body %}
     {% raw %}
-    <div ui-view></div>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-controller="NavController as nav">
         <div class="container">
             <div class="navbar-header">
@@ -29,16 +28,31 @@
                     <li data-ng-class="{ 'active':nav.selectedTab('tags') }">
                         <a ui-sref="tags">Tags</a>
                     </li>
-                    <li data-ng-class="{ 'active':nav.selectedTab('admin') }">
+                    <li data-ng-class="{ 'active':nav.selectedTab('admin') }" data-ng-show="isAuthorized(userRoles.admin)">
                         <a ui-sref="admin">Admin</a>
                     </li>
-                    <li data-ng-class="{ 'active':nav.selectedTab('login') }">
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li data-ng-class="{ 'active':nav.selectedTab('login') }" data-ng-hide="isAuthenticated()">
                         <a ui-sref="login">Login</a>
+                    </li>
+                    <li class="dropdown" data-ng-show="isAuthenticated()">
+                        <a href class="dropdown-toggle">
+                            <img data-gravatar-src="currentUser" class="img-circle" />
+                            {{ currentUser }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li data-ng-repeat="choice in dropdownItems">
+                                <a href data-ng-click="logout()">{{ choice }}</a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    <div ui-view></div>
     {% endraw %}
 {% endblock body %}
 
@@ -46,7 +60,7 @@
     {{ parent() }}
 
     {% if app.request.locale != 'en' %}
-    <script type="text/javascript" defer="defer" src="{{ asset('bower/moment/lang/' ~ app.request.locale ~ '.js') }}"></script>
+        <script type="text/javascript" defer="defer" src="{{ asset('bower/moment/lang/' ~ app.request.locale ~ '.js') }}"></script>
     {% endif %}
     {% javascripts output='compiled/js/app.js' debug=false
     'bower/jquery/jquery.js'
@@ -60,6 +74,8 @@
     'bower/angular-ui-router/release/angular-ui-router.js'
     'bower/angular-ui-utils/event.js'
     'bower/angular-recaptcha/release/angular-recaptcha.js'
+    'bower/angular-gravatar/build/md5.js'
+    'bower/angular-gravatar/build/angular-gravatar.js'
     '@SearchAwesomeWebBundle/Resources/public/js/app.js'
     '@SearchAwesomeWebBundle/Resources/public/js/directives/helpers.js'
     '@SearchAwesomeWebBundle/Resources/public/js/services/icon.js'
@@ -78,11 +94,12 @@
     <script src="{{ asset_url }}" type="text/javascript" defer="defer"></script>
     {% endjavascripts %}
 
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') == false and app.request.session.get('_recaptcha_valid') != true %}
-        <script type="text/javascript">
-            window.RECAPTCHA_PUBLIC_KEY = '{{ recaptcha_public_key }}';
-        </script>
-    {% endif %}
+    <script type="text/javascript">
+        window.RECAPTCHA_PUBLIC_KEY = '{{ recaptcha_public_key }}';
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') == false and app.request.session.get('_recaptcha_valid') != true %}
+        window.RECAPTCHA_NEEDED = true;
+        {% endif %}
+    </script>
     <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 
 {% endblock scripts %}

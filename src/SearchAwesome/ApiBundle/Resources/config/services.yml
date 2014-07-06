@@ -1,5 +1,6 @@
 parameters:
     backend_api.handler.json.class: SearchAwesome\ApiBundle\Handler\JsonHandler
+    backend_api.handler.authentication.class: SearchAwesome\ApiBundle\Handler\AuthenticationHandler
     backend_api.form.type.tag.class: SearchAwesome\ApiBundle\Form\Type\TagType
     backend_api.form.type.deleteTag.class: SearchAwesome\ApiBundle\Form\Type\DeleteTagType
     backend_api.form.type.recaptcha.class: SearchAwesome\ApiBundle\Form\Type\RecaptchaType
@@ -37,3 +38,7 @@ services:
         arguments: [%recaptcha_private_key%, %recaptcha_session_key%, @request_stack]
         tags:
             - { name: validator.constraint_validator, alias: recaptcha_validator }
+
+    backend_api.handler.authentication:
+        class: %backend_api.handler.authentication.class%
+        arguments: [@router, @translator]

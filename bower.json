@@ -28,6 +28,7 @@
     "moment": "~2.7.0",
     "angular-ui-utils": "bower-event",
     "angular-recaptcha": "~1.0.1",
-    "angular-ui-router": "~0.2.10"
+    "angular-ui-router": "~0.2.10",
+    "angular-gravatar": "~0.2.1"
   }
 }

@@ -4,13 +4,30 @@
 (function() {
     "use strict";
 
-    var app = angular.module('navbar', []);
+    var app = angular.module('navbar', ['ui.bootstrap', 'ui.gravatar', 'auth']);
 
-    app.controller('NavController', ['$rootScope', function ($rootScope) {
+    app.config(['gravatarServiceProvider', function (gravatarServiceProvider) {
+        gravatarServiceProvider.defaults = {
+            "size": 25,
+            "default": 'mm'
+        };
+
+        gravatarServiceProvider.secure = true;
+    }]);
+
+    app.controller('NavController', ['$rootScope', '$scope', 'AUTH_EVENTS', 'AuthService', function ($rootScope, $scope, AUTH_EVENTS, AuthService) {
         $rootScope.currentTab = 'icons';
+
+        $scope.dropdownItems = ['Logout'];
 
         this.selectedTab = function (tab) {
             return $rootScope.currentTab === tab;
         };
+
+        $scope.logout = function() {
+            AuthService.logout().then(function () {
+                $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+            });
+        }
     }]);
 })();

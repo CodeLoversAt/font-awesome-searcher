@@ -16,23 +16,32 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LoginController extends RestController
 {
-    public function loginAction(Request $request)
+    public function loginStatusAction(Request $request)
     {
         $sc = $this->get('security.context');
         $session = $request->getSession();
 
         if ($sc->isGranted('IS_AUTHENTICATED_FULLY')) {
             /** @var User $user */
-            $user = $this->getUser();
+            $token = $sc->getToken();
+            $user = $token->getUser();
+            $roles = $token->getRoles();
+            $outputRoles = array();
+            $translator = $this->get('translator');
+
+            foreach ($roles as $role) {
+                $outputRoles[] = $translator->trans($role->getRole(), array(), 'roles');
+            }
             $output = array(
                 'id'     => $session->getId(),
                 'userId' => $user->getId(),
-                'role'   => reset($user->getRoles())
+                'roles'  => $outputRoles,
+                'email'  => $user->getEmail()
             );
 
             $view = $this->view($output);
         } else {
-            $view = $this->view(null, Codes::HTTP_UNAUTHORIZED);
+            $view = $this->view(null);
         }
 
         return $view;

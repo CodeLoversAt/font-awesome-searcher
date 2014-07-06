@@ -156,7 +156,7 @@ class IconController extends RestController
 
 
         if ($form->isValid()) {
-            $icon->removeTag($tag);
+            $icon->removeTag($tag, $this->get('security.context')->isGranted('ROLE_ADMIN'));
             $iconManager->updateIcon($icon);
 
             $view = $this->view($icon);

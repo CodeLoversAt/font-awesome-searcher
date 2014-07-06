@@ -5,7 +5,9 @@
           data-ng-submit="login(credentials)" novalidate form-autofill-fix>
 
         <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="hidden" value="/api/after_login" name="_target_path" data-ng-model="credentials.targetPath" />
+        <div class="alert alert-danger" data-ng-show="errors.length">
+            <p data-ng-repeat="error in errors">{{ error }}</p>
+        </div>
         <input type="email" class="form-control" placeholder="E-mail address" data-ng-model="credentials.email" required autofocus />
         <input type="password" class="form-control" placeholder="Your password" data-ng-model="credentials.password" required />
 

@@ -4,6 +4,8 @@
 (function() {
     var app = angular.module('admin', []);
 
-    app.controller('AdminController', function () {
-    });
+    app.controller('AdminIndexController', ['$rootScope', function ($rootScope) {
+        $rootScope.currentTab = 'admin';
+        $rootScope.title = 'Administration';
+    }]);
 })();

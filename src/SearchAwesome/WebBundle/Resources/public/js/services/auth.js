@@ -6,17 +6,30 @@
     var app = angular.module('auth', ['session']);
 
     app.factory('AuthService', function ($http, Session) {
+        var hasRole = function (roles) {
+            if (!angular.isArray(roles)) {
+                roles = [roles];
+            }
+
+            for (var i = 0; i < Session.userRoles.length; i++) {
+                if (-1 !== roles.indexOf(Session.userRoles[i])) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
         return {
             login: function(credentials) {
                 return $http
                     .post('/login_check', {
                         _username: credentials.email,
                         _password: credentials.password,
-                        _remember_me: credentials.rememberMe,
-                        _target_path: credentials.targetPath
+                        _remember_me: credentials.rememberMe ? 'on' : null
                     })
                     .then(function (res) {
-                        Session.create(res.id, res.userid, res.role);
+                        Session.create(res.data.id, res.data.userId, res.data.email, res.data.roles);
                     });
             },
 
@@ -25,11 +38,25 @@
             },
 
             isAuthorized: function(roles) {
-                if (!angular.isArray(roles)) {
-                    roles = [roles];
-                }
+                return (this.isAuthenticated() && hasRole(roles));
+            },
 
-                return (this.isAuthenticated() && roles.indexOf(Session.userRole) !== -1);
+            logout: function() {
+                return $http.post('/logout').then(function () {
+                    Session.destroy();
+                });
+            },
+
+            refresh: function(callback) {
+                if ('function' !== typeof callback) {
+                    callback = function() {};
+                }
+                return $http.post('/api/login_status').then(function (res) {
+                    if (res.data && res.data !== 'null') {
+                        Session.create(res.data.id, res.data.userId, res.data.email, res.data.roles);
+                        callback();
+                    }
+                });
             }
         };
     });
@@ -73,4 +100,13 @@
         notAuthenticated: 'auth-not-authenticated',
         notAuthorized: 'auth-not-authorized'
     });
+
+    // check login status on start
+    app.run(['$http', '$rootScope', 'AuthService', 'AUTH_EVENTS', function ($http, $rootScope, AuthService, AUTH_EVENTS) {
+        if (false === AuthService.isAuthenticated()) {
+            AuthService.refresh(function() {
+                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+            });
+        }
+    }]);
 })();

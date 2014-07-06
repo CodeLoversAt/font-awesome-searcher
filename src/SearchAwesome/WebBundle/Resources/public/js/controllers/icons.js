@@ -4,7 +4,7 @@
 (function() {
     "use strict";
 
-    var app = angular.module('iconControllers', ['iconList', 'iconService', 'siteService', 'tagService', 'ui.event', 'vcRecaptcha', 'ui.bootstrap']);
+    var app = angular.module('iconControllers', ['iconList', 'iconService', 'siteService', 'tagService', 'ui.event', 'vcRecaptcha', 'ui.bootstrap', 'session']);
 
     app.controller('IconsController', ['$scope', '$rootScope', 'iconListService', function ($scope, $rootScope, iconListService) {
         this.lastSearch = '';
@@ -45,12 +45,16 @@
         }
     }]);
 
-    app.controller('IconDetailController', ['$scope', '$rootScope', '$stateParams',  '$http', '$modal', 'icon', 'Site', 'Tag', 'vcRecaptchaService', function ($scope, $rootScope, $stateParams, $http, $modal, icon, Site, Tag, vcRecaptchaService) {
+    app.controller('IconDetailController', ['$scope', '$rootScope', '$stateParams',  '$http', '$modal', 'icon', 'Site', 'Tag', 'vcRecaptchaService', 'Session', function ($scope, $rootScope, $stateParams, $http, $modal, icon, Site, Tag, vcRecaptchaService,  Session) {
         this.loading = true;
         this.submitting = false;
         var self = this;
         $rootScope.currentTab = 'icons';
         $scope.errors = {};
+
+        this.needsCaptcha = function () {
+            return Session.needsCaptcha();
+        };
 
         // load data
         this.site = new Site();
@@ -79,7 +83,6 @@
         });
 
         this.recaptchaKey = window.RECAPTCHA_PUBLIC_KEY || false;
-        this.needsCaptcha = false !== this.recaptchaKey;
 
         this.tag = new Tag();
         this.tagMaster = new Tag();
@@ -106,7 +109,7 @@
             $scope.errors = {};
 
             // add recaptcha data
-            if (true === this.needsCaptcha) {
+            if (true === this.needsCaptcha()) {
                 this.tag.recaptcha = vcRecaptchaService.data();
             }
 
@@ -121,7 +124,7 @@
                     }
                 }
                 self.tags.push(tag);
-                self.needsCaptcha = false;
+                Session.captchaSuccess();
             }).error(function (data) {
                 var errors = data.errors;
                 self.submitting = false;
@@ -146,7 +149,7 @@
                     }
                 }
 
-                if (true === self.needsCaptcha) {
+                if (true === self.needsCaptcha()) {
                     vcRecaptchaService.reload();
                 }
             });
@@ -169,7 +172,7 @@
             $http.delete('/api/icons/' + self.icon.id + '/tags/' + tag.id, params).success(function () {
                 tag.deleting = false;
                 self.tags.splice(self.tags.indexOf(tag), 1);
-                self.needsCaptcha = false;
+                Session.captchaSuccess();
             }).error(function() {
                 tag.deleting = false;
                 displayCaptchaModal(tag);
@@ -193,7 +196,7 @@
         };
 
         this.removeTag = function(tag) {
-            if (false === this.needsCaptcha) {
+            if (false === this.needsCaptcha()) {
                 performDelete(tag);
                 return;
             }

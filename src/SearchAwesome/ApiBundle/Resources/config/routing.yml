@@ -22,7 +22,8 @@ post_icon_tag:
     requirements: { _format: 'json', id: "[a-z0-9]+" }
     methods: [ 'POST' ]
 
-after_login:
-    pattern:    /after_login
-    defaults: { _controller: SearchAwesomeApiBundle:Login:login, _format: 'json' }
+login_status:
+    pattern:    /login_status
+    defaults: { _controller: SearchAwesomeApiBundle:Login:loginStatus, _format: 'json' }
     requirements: { _format: 'json' }
+    methos: [ 'POST' ]

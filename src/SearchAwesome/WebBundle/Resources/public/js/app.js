@@ -3,7 +3,7 @@
  */
 
 (function() {
-    var app = angular.module('searchAwesome', ['iconControllers', 'ngRoute', 'helpers', 'navbar', 'tagControllers', 'auth', 'ui.router', 'iconService', 'tagService', 'siteService', 'login', 'admin']);
+    var app = angular.module('searchAwesome', ['iconControllers', 'ngRoute', 'helpers', 'navbar', 'tagControllers', 'auth', 'session', 'ui.router', 'iconService', 'tagService', 'siteService', 'login', 'admin', 'ui.gravatar']);
 
     app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', 'USER_ROLES', function ($stateProvider, $urlRouterProvider, $locationProvider, USER_ROLES) {
             $stateProvider
@@ -50,8 +50,11 @@
 
             $locationProvider.html5Mode(false).hashPrefix('!');
         }])
-        .run(['$rootScope', 'AUTH_EVENTS', 'AuthService', function ($rootScope, AUTH_EVENTS, AuthService) {
-            $rootScope.$on('$stateChangeStart', function (event, next) {
+        .config(['$httpProvider', function($httpProvider) {
+            $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+        }])
+        .run(['$rootScope', 'AUTH_EVENTS', 'AuthService', '$state', 'Session', function ($rootScope, AUTH_EVENTS, AuthService, $state, Session) {
+            $rootScope.$on('$stateChangeStart', function (event, next, nextParams, from, fromParams) {
                 if (next.data && next.data.authorizedRoles) {
                     var authorizedroles = next.data.authorizedRoles;
                     if (!AuthService.isAuthorized(authorizedroles)) {
@@ -62,29 +65,63 @@
                             $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
                         } else {
                             // user is not logged in
+                            // store target
+                            Session.set('_login_target', next.name);
+                            Session.set('_login_target_params', nextParams);
                             $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
                         }
                     }
-                }
-            });
-
-            $rootScope.$on('$routeChangeStart', function () {
-                if (sessionStorage.restorestate == 'true') {
-                    $rootScope.$broadcast('restorestate');
-                    sessionStorage.restorestate = false;
+                } else if (next.name === 'login') {
+                    Session.set('_login_target', from.name);
+                    Session.set('_login_target_params', fromParams);
                 }
             });
 
             $rootScope.title = 'Search Awesome!';
 
-            window.onbeforeunload = function () {
-                sessionStorage.restorestate = angular.toJson(true);
-            };
+            $rootScope.$on(AUTH_EVENTS.notAuthenticated, function () {
+                $state.go('login');
+            });
+
+            $rootScope.$on(AUTH_EVENTS.logoutSuccess, function() {
+                var current = $state.$current;
+                Session.resetCaptcha();
+
+                if (current.data && current.data.authorizedRoles) {
+                    // store target
+                    Session.set('_login_target', current.name);
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                } else {
+                    $state.reload();
+                }
+            });
+
+            $rootScope.$on(AUTH_EVENTS.loginSuccess, function() {
+                var target = Session.remove('_login_target');
+                Session.captchaSuccess();
+
+                if (target) {
+                    $state.go(target, Session.remove('_login_target_params'));
+                }
+            });
         }]);
 
-    app.controller('ApplicationController', ['$scope', 'USER_ROLES', 'AuthService', function ($scope, USER_ROLES, AuthService) {
-        $scope.currentUser = null;
+    app.controller('ApplicationController', ['$scope', '$rootScope', 'USER_ROLES', 'AUTH_EVENTS', 'AuthService', 'Session', function ($scope, $rootScope, USER_ROLES, AUTH_EVENTS, AuthService, Session) {
+        $scope.currentUser = Session.email || null;
         $scope.userRoles = USER_ROLES;
         $scope.isAuthorized = AuthService.isAuthorized;
+        $scope.isAuthenticated = AuthService.isAuthenticated;
+
+        $rootScope.$on(AUTH_EVENTS.loginSuccess, function() {
+            $scope.currentUser = Session.email;
+        });
+
+        $rootScope.$on(AUTH_EVENTS.logoutSuccess, function() {
+            $scope.currentUser = null;
+        });
+
+        $rootScope.$on(AUTH_EVENTS.notAuthenticated, function () {
+            $scope.currentUser = null;
+        });
     }]);
 })();
