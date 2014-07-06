@@ -45,7 +45,7 @@
         }
     }]);
 
-    app.controller('IconDetailController', ['$scope', '$rootScope', '$stateParams',  '$http', '$modal', 'icon', 'Site', 'Tag', 'vcRecaptchaService', 'Session', function ($scope, $rootScope, $stateParams, $http, $modal, icon, Site, Tag, vcRecaptchaService,  Session) {
+    app.controller('IconDetailController', ['$scope', '$rootScope', '$stateParams',  '$http', '$modal', 'icon', 'Site', 'Tag', 'vcRecaptchaService', 'Session', '$window', function ($scope, $rootScope, $stateParams, $http, $modal, icon, Site, Tag, vcRecaptchaService,  Session, $window) {
         this.loading = true;
         this.submitting = false;
         var self = this;
@@ -192,6 +192,9 @@
 
             modal.result.then(function (data) {
                 performDelete(tag, {recaptcha: data});
+            }, function() {
+                // dismissed
+                $window.location.reload();
             });
         };
 
