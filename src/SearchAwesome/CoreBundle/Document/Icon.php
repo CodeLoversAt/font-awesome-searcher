@@ -301,6 +301,8 @@ class Icon
         foreach ($this->tags as $tagUsage) {
             /** @var TagUsage $tagUsage */
             if ($tagUsage->getTagId() === $tag->getId()) {
+                // ensure it is not deleted
+                $tagUsage->setDeleted(false);
                 return $this;
             }
         }

@@ -18,24 +18,24 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a ui-sref="icons" class="navbar-brand">SearchAwesome</a>
+                <a ui-sref="icons" class="navbar-brand" data-ng-click="isCollapsed = true">SearchAwesome</a>
             </div>
             <div class="collapse navbar-collapse" data-collapse="isCollapsed">
                 <ul class="nav navbar-nav">
                     <li data-ng-class="{ 'active':nav.selectedTab('icons') }">
-                        <a ui-sref="icons">Icons</a>
+                        <a ui-sref="icons" data-ng-click="isCollapsed = true">Icons</a>
                     </li>
                     <li data-ng-class="{ 'active':nav.selectedTab('tags') }">
-                        <a ui-sref="tags">Tags</a>
+                        <a ui-sref="tags" data-ng-click="isCollapsed = true">Tags</a>
                     </li>
                     <li data-ng-class="{ 'active':nav.selectedTab('admin') }" data-ng-show="isAuthorized(userRoles.admin)">
-                        <a ui-sref="admin">Admin</a>
+                        <a ui-sref="admin" data-ng-click="isCollapsed = true">Admin</a>
                     </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     <li data-ng-class="{ 'active':nav.selectedTab('login') }" data-ng-hide="isAuthenticated()">
-                        <a ui-sref="login">Login</a>
+                        <a ui-sref="login" data-ng-click="isCollapsed = true">Login</a>
                     </li>
                     <li class="dropdown" data-ng-show="isAuthenticated()">
                         <a href class="dropdown-toggle">

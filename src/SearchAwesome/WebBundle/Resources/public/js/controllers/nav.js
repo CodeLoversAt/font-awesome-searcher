@@ -27,6 +27,7 @@
 
         $scope.logout = function() {
             AuthService.logout().then(function () {
+                $scope.isCollapsed = true;
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
             });
         }
