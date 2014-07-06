@@ -5,7 +5,13 @@
     var app = angular.module('session', []);
 
     app.service('Session', function () {
-        var store = angular.fromJson(sessionStorage.session) || {};
+        var store;
+        try {
+            store = angular.fromJson(sessionStorage.session) || {};
+        } catch (err) {
+            console.log(err);
+            store = {};
+        }
 
         this.create = function (sessionId, userId, email, userRoles) {
             this.id = sessionId;
@@ -26,7 +32,11 @@
             this.userId = null;
             this.userRoles = [];
             store = {};
-            sessionStorage.clear();
+            try {
+                sessionStorage.clear();
+            } catch (err) {
+                console.log(err);
+            }
         };
 
         this.get = function (key) {
@@ -38,7 +48,11 @@
 
         this.set = function (key, value) {
             store[key] = value;
-            sessionStorage.session = angular.toJson(store);
+            try {
+                sessionStorage.session = angular.toJson(store);
+            } catch (err) {
+                console.log(err);
+            }
         };
 
         this.remove = function(key) {
@@ -47,7 +61,11 @@
             if (store[key]) {
                 result = store[key];
                 delete store[key];
-                sessionStorage.session = angular.toJson(store);
+                try {
+                    sessionStorage.session = angular.toJson(store);
+                } catch (err) {
+                    console.log(err);
+                }
             }
 
             return result;

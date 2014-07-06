@@ -99,6 +99,30 @@ class Icon
     protected $tags;
 
     /**
+     * used for searching by keywords
+     *
+     * @var array
+     *
+     * @JMS\Type("array<string>")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\ReadOnly()
+     */
+    protected $keywords = array();
+
+    /**
+     * used for searching by soundex values
+     *
+     * @var array
+     *
+     * @JMS\Type("array<string>")
+     * @JMS\Groups({"REST"})
+     * @JMS\Expose()
+     * @JMS\ReadOnly()
+     */
+    protected $soundexes = array();
+
+    /**
      * @var Site
      *
      * @JMS\Type("string")
@@ -377,5 +401,21 @@ class Icon
         }
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSoundexes()
+    {
+        return $this->soundexes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
     }
 }

@@ -4,9 +4,16 @@ SearchAwesome\CoreBundle\Document\Icon:
     type:               document
 
     indexes:
-        tags:
+        keywords:
             keys:
-                tags: true
+                tags.name:      true
+                tags.deleted:   true
+            options:
+                background: true
+        soundex:
+            keys:
+                tags.soundex:   true
+                tags.deleted:   true
             options:
                 background: true
         site_name:
@@ -27,7 +34,6 @@ SearchAwesome\CoreBundle\Document\Icon:
     embedMany:
         tags:
             targetDocument: SearchAwesome\CoreBundle\Document\TagUsage
-            index:  true
             simple: true
 
     fields:

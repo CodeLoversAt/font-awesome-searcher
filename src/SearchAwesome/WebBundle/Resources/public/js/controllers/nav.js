@@ -19,6 +19,7 @@
         $rootScope.currentTab = 'icons';
 
         $scope.dropdownItems = ['Logout'];
+        $scope.isCollapsed = true;
 
         this.selectedTab = function (tab) {
             return $rootScope.currentTab === tab;
