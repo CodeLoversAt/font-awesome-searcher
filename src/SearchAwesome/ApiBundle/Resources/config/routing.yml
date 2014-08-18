@@ -26,4 +26,4 @@ login_status:
     pattern:    /login_status
     defaults: { _controller: SearchAwesomeApiBundle:Login:loginStatus, _format: 'json' }
     requirements: { _format: 'json' }
-    methos: [ 'POST' ]
+    methods: [ 'POST' ]
