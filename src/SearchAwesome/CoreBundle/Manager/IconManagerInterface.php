@@ -69,6 +69,8 @@ interface IconManagerInterface
      *
      * @param Icon $icon
      * @param boolean $andFlush
+     *
+     * @return Icon the managed entity
      */
     public function updateIcon(Icon $icon, $andFlush = true);
 

@@ -78,11 +78,6 @@ doctrine_mongodb:
 code_lovers_acl:
     handler:    mongodb
 
-sixdays_opcache:
-    host_ip:    %opcache_host_ip%
-    host_name:  %app_domain%
-    web_dir:    %kernel.root_dir%/../web
-
 iam_persistent_mongo_db_acl:
     acl_provider:
         default_database: %mongo_database%

@@ -67,6 +67,8 @@ interface TagManagerInterface
      *
      * @param Tag $tag
      * @param boolean $andFlush
+     *
+     * @return Tag the managed entity
      */
     public function updateTag(Tag $tag, $andFlush = true);
 

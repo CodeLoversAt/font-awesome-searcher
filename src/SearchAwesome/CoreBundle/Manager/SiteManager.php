@@ -94,11 +94,13 @@ class SiteManager implements SiteManagerInterface
      */
     public function updateSite(Site $site, $andFlush = true)
     {
-        $this->om->persist($site);
+        $site = $this->om->merge($site);
 
         if (true === $andFlush) {
             $this->om->flush();
         }
+
+        return $site;
     }
 
     /**

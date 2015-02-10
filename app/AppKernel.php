@@ -21,7 +21,6 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new CodeLovers\AclBundle\CodeLoversAclBundle(),
-            new Sixdays\OpcacheBundle\SixdaysOpcacheBundle(),
             new SearchAwesome\CoreBundle\SearchAwesomeCoreBundle(),
             new SearchAwesome\ApiBundle\SearchAwesomeApiBundle(),
             new SearchAwesome\WebBundle\SearchAwesomeWebBundle(),

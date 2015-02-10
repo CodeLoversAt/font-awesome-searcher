@@ -113,11 +113,13 @@ class IconManager implements IconManagerInterface
      */
     public function updateIcon(Icon $icon, $andFlush = true)
     {
-        $this->om->persist($icon);
+        $icon = $this->om->merge($icon);
 
         if (true === $andFlush) {
             $this->om->flush();
         }
+
+        return $icon;
     }
 
     /**

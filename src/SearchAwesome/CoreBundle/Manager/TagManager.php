@@ -104,13 +104,13 @@ class TagManager implements TagManagerInterface
      */
     public function updateTag(Tag $tag, $andFlush = true)
     {
-        $this->om->persist($tag);
+        $tag = $this->om->merge($tag);
 
         if (true === $andFlush) {
             $this->om->flush();
         }
 
-        return $this;
+        return $tag;
     }
 
     /**

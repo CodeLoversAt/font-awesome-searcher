@@ -58,6 +58,8 @@ interface SiteManagerInterface
      *
      * @param Site $site
      * @param boolean $andFlush
+     *
+     * @return Site the managed entity
      */
     public function updateSite(Site $site, $andFlush = true);
 
