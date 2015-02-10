@@ -57,24 +57,6 @@ assetic:
             bin: %uglify_css%
             node: %node_path%
 
-# Doctrine Configuration
-doctrine:
-    dbal:
-        driver:   "%database_driver%"
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        charset:  UTF8
-        # if using pdo_sqlite as your database driver, add the path in parameters.yml
-        # e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        # path:     "%database_path%"
-
-    orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
-        auto_mapping: true
-
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -112,7 +94,7 @@ jms_translation:
             dirs: [%kernel.root_dir%, %kernel.root_dir%/../src]
             output_dir: %kernel.root_dir%/Resources/translations
             ignored_domains: [routes]
-            excluded_names: [*TestCase.php, *Test.php]
+            excluded_names: ['*TestCase.php', '*Test.php']
             excluded_dirs: [cache, data, logs]
             output_format: xliff
             default_output_format: xliff
@@ -176,7 +158,7 @@ dunglas_angular_csrf:
     cookie:
         set_on:
             - {path "^/", methods: [GET, POST] }
-    secure:
-        - { path: "^/api" }
-        - { route: "^fos_user_security" }
+#    secure:
+#        - { path: "^/api" }
+#        - { route: "^fos_user_security" }
 

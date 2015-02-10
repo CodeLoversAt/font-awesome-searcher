@@ -1,3 +1,8 @@
 _frontend:
     path:     /
     defaults: { _controller: SearchAwesomeWebBundle:Web:index }
+
+_debug:
+    path:     /debug.{_format}
+    defaults: { _controller: SearchAwesomeWebBundle:Web:debug, _format: html }
+    requirements: { _format: 'html' }
