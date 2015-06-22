@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "47128c1d08aaca8187a9f7533d10ac2e",
+    "hash": "60563189359d742f606d270cbb549287",
     "packages": [
         {
             "name": "codelovers/acl-bundle",
@@ -3190,7 +3190,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "ext-mongo": "*"
     },
     "platform-dev": []
 }
