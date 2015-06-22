@@ -5,7 +5,7 @@ parameters:
     mailer_password:   ~
 
     locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            SensioLabsInsightsDoesNotRecognizeThisAsTheDistFileAndThinksThereIsAnIssueWithHavingTheDefaultSecret
 
     debug_toolbar:          true
     debug_redirects:        false
